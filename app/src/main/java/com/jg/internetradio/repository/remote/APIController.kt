@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class APIController private constructor() {
 
     companion object {
-        val instance: APIController by lazy { APIController() }
+        val INSTANCE: APIController by lazy { APIController() }
     }
 
     private val url = "http://api.dirble.com"

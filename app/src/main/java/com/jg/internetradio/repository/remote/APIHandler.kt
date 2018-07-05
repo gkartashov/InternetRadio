@@ -1,8 +1,7 @@
 package com.jg.internetradio.repository.remote
 
-import com.jg.internetradio.entity.Category
-import retrofit2.Call
-
 class APIHandler(private val apiService: APIService) {
-    fun getCategories() : Call<MutableList<Category>>? = apiService.getCategories()
+    fun getCategories(token: String) = apiService.getCategories(token)
+    fun getCategoryStations(token: String, categoryId: Int) = apiService.getCategoryStations(token, categoryId)
+    fun getStation(token: String, stationId: Int) = apiService.getStation(token, stationId)
 }
