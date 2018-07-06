@@ -6,13 +6,13 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class RetrofitLiveData<T>(private val call: Call<T>?) : LiveData<T>(), Callback<T> {
-    override fun onActive() = start()
-
-    fun start() {
+    fun load() {
         if (call?.isCanceled == false && !call?.isExecuted)
-            call.enqueue(this)
+            call.clone().enqueue(this)
         else Unit
     }
+
+    fun clear(){ value = null }
 
     fun cancel() = if (call?.isCanceled == false) call.cancel() else Unit
 
@@ -21,7 +21,6 @@ class RetrofitLiveData<T>(private val call: Call<T>?) : LiveData<T>(), Callback<
 
     override fun onResponse(call: Call<T>?, response: Response<T>?) {
         value = response?.body()
-
     }
     override fun toString(): String = value.toString()
 }

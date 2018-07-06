@@ -15,7 +15,7 @@
         <meta-data
             android:name="apiKey"
             android:resource="@string/apiKeyString" />
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
