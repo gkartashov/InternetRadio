@@ -12,11 +12,11 @@ import retrofit2.http.Query
 
 interface APIService {
     @GET("v2/categories" )
-    fun getCategories(@Query("token") token: String) : Call<MutableList<Category>>?
+    fun getCategories(@Query("token") token: String) : Call<List<Category>>?
 
     @GET("v2/category/{categoryId}/stations")
     fun getCategoryStations(@Query("token") token: String,
-                            @Path("categoryId") categoryId : Int) : Call<MutableList<Station>>?
+                            @Path("categoryId") categoryId : Int) : Call<List<Station>>?
 
     @GET("v2/station/{station}")
     fun getStation(@Query("token") token: String,

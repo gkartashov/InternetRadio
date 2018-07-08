@@ -11,10 +11,10 @@ import com.jg.internetradio.repository.RetrofitLiveData
 
 class CategoryListViewModel(application: Application) : AndroidViewModel(application) {
     private val radioRepository: RadioRepository = (application as InternetRadioApplication).getRadioRepository()
-    var categoryList : RetrofitLiveData<MutableList<Category>>? = radioRepository.getCategories(getApplication<InternetRadioApplication>().applicationContext.resources.getString(apiKeyString))
+    var categoryList : RetrofitLiveData<List<Category>>? = radioRepository.getCategories(getApplication<InternetRadioApplication>().applicationContext.resources.getString(apiKeyString))
 
     init {
-        clear()
+        load()
     }
     fun load() = categoryList?.load()
 

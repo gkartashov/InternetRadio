@@ -12,14 +12,13 @@ class MainActivity : AppCompatActivity(){
         setContentView(R.layout.activity_main)
 
         main_activity_pager.adapter = PagerViewAdapter(supportFragmentManager)
-
-        /*binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
-        binding.categoryListViewModel = ViewModelProviders.of(this).get(CategoryListViewModel::class.java)
-        binding.categoryListViewModel?.categoryList?.observe(this, Observer { t ->
-                binding.textView.text = when(t) {
-                    null -> "Nothing found"
-                    else -> if (!t?.isEmpty()!!) binding.categoryListViewModel.toString() else "Nothing found"
-                }
-        })*/
+        main_activity_pager.setPageTransformer(false) { page, position ->
+            page.translationX = page.width * if (position <= -1.0f || position >= 1.0f || position == 0.0f) position else -position
+            page.alpha = when {
+                position <= -1.0f || position >= 1.0f -> 0.0f
+                position == 0.0f -> 1.0f
+                else -> 1.0f - Math.abs(position)
+            }
+        }
     }
 }
