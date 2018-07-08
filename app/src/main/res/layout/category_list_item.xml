@@ -7,44 +7,45 @@
             name="category"
             type="com.jg.internetradio.entity.Category" />
     </data>
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:layout_marginTop="4dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="4dp">
-
-        <RelativeLayout
-            android:id="@+id/layout"
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp">
-            <TextView
-                android:id="@+id/category_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="@{category.title}"/>
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp">
 
-            <TextView
-                android:id="@+id/category_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/category_title"
-                android:text="@{category.description}" />
+            <RelativeLayout
+                android:id="@+id/layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp">
 
-            <ImageView
-                android:id="@+id/info_button"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_alignParentEnd="true"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_info"/>
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+                <TextView
+                    android:id="@+id/category_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:text="@{category.title}" />
+
+                <TextView
+                    android:id="@+id/category_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/category_title"
+                    android:visibility="visible"
+                    android:text="@{category.capitalize(category.description)}" />
+
+                <ImageView
+                    android:id="@+id/arrow_image"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignBottom="@id/category_title"
+                    android:src="@drawable/ic_down_arrow"/>
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
 </layout>
