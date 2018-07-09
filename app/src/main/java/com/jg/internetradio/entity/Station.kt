@@ -3,7 +3,7 @@ package com.jg.internetradio.entity
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class Station(@SerializedName("id") @Expose val id: Int = 0,
+data class Station(@SerializedName("id") @Expose val id: Int = 0,
               @SerializedName("name") @Expose val name: String = "",
               @SerializedName("country") @Expose val country: String = "",
               @SerializedName("description") @Expose val description: String = "",

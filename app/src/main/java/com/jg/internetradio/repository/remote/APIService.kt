@@ -15,8 +15,8 @@ interface APIService {
     fun getCategories(@Query("token") token: String) : Call<List<Category>>?
 
     @GET("v2/category/{categoryId}/stations")
-    fun getCategoryStations(@Query("token") token: String,
-                            @Path("categoryId") categoryId : Int) : Call<List<Station>>?
+    fun getCategoryStations(@Path("categoryId") categoryId : Int,
+                            @Query("token") token: String) : Call<List<Station>>?
 
     @GET("v2/station/{station}")
     fun getStation(@Query("token") token: String,
