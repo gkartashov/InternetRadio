@@ -15,9 +15,8 @@ import com.jg.internetradio.entity.Category
 import com.jg.internetradio.entity.Station
 import com.jg.internetradio.ui.fragment.OnFragmentChange
 import com.jg.internetradio.ui.fragment.stationlist.recyclerview.StationListAdapter
+import com.jg.internetradio.ui.misc.marginDecorator
 import com.jg.internetradio.viewmodel.StationListViewModel
-import kotlinx.android.synthetic.main.fragment_station_list.*
-import java.io.Serializable
 
 class StationListFragment : Fragment() {
 
@@ -40,15 +39,16 @@ class StationListFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val category = arguments?.getSerializable("Category") as Category
         val factory = StationListViewModel.Factory(activity?.application!!, category)
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_station_list, container,false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_station_list, container,false)
         binding.stationListViewModel = ViewModelProviders.of(this, factory).get(StationListViewModel::class.java)
 
-        stationListAdapter = StationListAdapter()
+        stationListAdapter = StationListAdapter(listener = activity as OnStationClick)
 
         binding.stationListRecyclerView.adapter = stationListAdapter
+        binding.stationListRecyclerView.addItemDecoration(marginDecorator(context))
         binding.stationListViewModel?.stationList
 
-        listener.onChange("Stations")
+        listener.onChange("${category.title} stations")
 
         subscribeUI()
 

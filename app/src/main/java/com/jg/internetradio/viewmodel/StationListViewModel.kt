@@ -11,7 +11,7 @@ import com.jg.internetradio.repository.RetrofitLiveData
 
 class StationListViewModel(application: Application, val category: Category) : AndroidViewModel(application) {
 
-    class Factory(val application: Application, val category: Category) : ViewModelProvider.Factory {
+    class Factory(private val application: Application, private val category: Category) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return StationListViewModel(application, category) as T
         }
@@ -23,6 +23,7 @@ class StationListViewModel(application: Application, val category: Category) : A
     init {
         load()
     }
+
     fun load() = stationList?.load()
 
     fun clear() = stationList?.clear()

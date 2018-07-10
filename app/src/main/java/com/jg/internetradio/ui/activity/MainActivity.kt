@@ -3,11 +3,14 @@ package com.jg.internetradio.ui.activity
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.view.ViewPager
+
 import com.jg.internetradio.R
+import com.jg.internetradio.entity.Station
+import com.jg.internetradio.ui.fragment.stationlist.OnStationClick
 import com.jg.internetradio.ui.misc.PagerViewAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity(), OnStationClick{
     private val pagerViewAdapter = PagerViewAdapter(supportFragmentManager)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,4 +29,9 @@ class MainActivity : AppCompatActivity(){
             else -> 1.0f - Math.abs(position)
         }
     }
+
+    override fun onClick(station: Station) {
+        main_activity_pager.currentItem = 1
+    }
+
 }

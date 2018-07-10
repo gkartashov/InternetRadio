@@ -3,11 +3,8 @@ package com.jg.internetradio.ui.fragment.categorylist
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
-import android.graphics.Rect
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
-import android.util.TypedValue
 import android.view.*
 
 import com.jg.internetradio.R
@@ -16,6 +13,7 @@ import com.jg.internetradio.entity.Category
 import com.jg.internetradio.ui.fragment.OnFragmentChange
 import com.jg.internetradio.ui.fragment.categorylist.recyclerview.CategoryListAdapter
 import com.jg.internetradio.viewmodel.CategoryListViewModel
+import com.jg.internetradio.ui.misc.marginDecorator
 
 
 
@@ -42,7 +40,7 @@ class CategoryListFragment : Fragment() {
         categoryListAdapter = CategoryListAdapter(categoryClickListener = onCategoryClick)
 
         binding.categoryListRecyclerView.adapter = categoryListAdapter
-        binding.categoryListRecyclerView.addItemDecoration(marginDecorator())
+        binding.categoryListRecyclerView.addItemDecoration(marginDecorator(context))
 
         onFragmentChange.onChange("Categories")
 
@@ -58,24 +56,5 @@ class CategoryListFragment : Fragment() {
                 categoryListAdapter.notifyDataSetChanged()
             }
         })
-    }
-
-    private fun marginDecorator() = object : RecyclerView.ItemDecoration() {
-        val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,8.0f, context?.resources?.displayMetrics).toInt()
-
-        override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
-            val itemPosition = parent?.getChildAdapterPosition(view)
-            if (itemPosition == RecyclerView.NO_POSITION) {
-                return
-            }
-            if (itemPosition == 0) {
-                outRect?.top = padding
-            }
-
-            val adapter = parent?.adapter
-            if (itemPosition == adapter?.itemCount?.minus(1)) {
-                outRect?.bottom = padding
-            }
-        }
     }
 }

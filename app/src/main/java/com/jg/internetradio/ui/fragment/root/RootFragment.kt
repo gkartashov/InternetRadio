@@ -28,13 +28,14 @@ class RootFragment : Fragment(), OnFragmentChange, OnCategoryClick {
 
     override fun onClick(category: Category) {
         activity?.supportFragmentManager?.beginTransaction()
-                //?.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_out, R.anim.abc_fade_in)
+                ?.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_out, R.anim.abc_fade_in)
                 ?.replace(R.id.container, StationListFragment.newInstance(category, this), "StationListFragment")
                 ?.addToBackStack("StationListFragment")
                 ?.commit()
     }
 
     override fun onChange(title: String) {
+        appbar_layout.setExpanded(true)
         toolbar.title = title
     }
 

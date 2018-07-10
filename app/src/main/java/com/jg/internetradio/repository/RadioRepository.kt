@@ -4,7 +4,7 @@ import android.content.Context
 import com.jg.internetradio.R
 import com.jg.internetradio.entity.Category
 import com.jg.internetradio.entity.Station
-import com.jg.internetradio.repository.remote.APIService
+import com.jg.internetradio.repository.remote.APIHandler
 
 class RadioRepository private constructor() {
     companion object {
@@ -12,7 +12,7 @@ class RadioRepository private constructor() {
     }
 
     lateinit var context: Context
-    private val apiService = APIService.getInstance()
+    private val apiService = APIHandler.INSTANCE
 
     fun getCategories() = RetrofitLiveData(apiService?.getCategories(context.resources.getString(R.string.apiKeyString))!!)
 
