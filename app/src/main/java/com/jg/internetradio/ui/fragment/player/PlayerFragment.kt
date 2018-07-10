@@ -8,8 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.jg.internetradio.R
+import com.jg.internetradio.entity.Station
+import com.jg.internetradio.ui.fragment.OnPlayStart
+import com.jg.internetradio.viewmodel.manager.PlayerManager
 
-class PlayerFragment : Fragment() {
+class PlayerFragment : Fragment(), OnPlayStart {
+    var p: PlayerManager? = null
+    override fun onStart(station: Station) {
+        if (p == null)
+            p = PlayerManager(activity?.applicationContext!!)
+        p?.play(station.streams?.first()?.stream!!)
+    }
 
     companion object {
         fun newInstance() = PlayerFragment()

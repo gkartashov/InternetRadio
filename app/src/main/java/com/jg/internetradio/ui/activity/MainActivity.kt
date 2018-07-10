@@ -6,12 +6,16 @@ import android.support.v4.view.ViewPager
 
 import com.jg.internetradio.R
 import com.jg.internetradio.entity.Station
+import com.jg.internetradio.ui.fragment.OnPlayStart
 import com.jg.internetradio.ui.fragment.stationlist.OnStationClick
 import com.jg.internetradio.ui.misc.PagerViewAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
+
+
 class MainActivity : AppCompatActivity(), OnStationClick{
     private val pagerViewAdapter = PagerViewAdapter(supportFragmentManager)
+    private lateinit var playListener: OnPlayStart
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +36,9 @@ class MainActivity : AppCompatActivity(), OnStationClick{
 
     override fun onClick(station: Station) {
         main_activity_pager.currentItem = 1
+        playListener = pagerViewAdapter.playerFragment
+        playListener.onStart(station)
+
     }
 
 }
