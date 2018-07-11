@@ -7,7 +7,7 @@ import retrofit2.Response
 
 class RetrofitLiveData<T>(private val call: Call<T>?) : LiveData<T>(), Callback<T> {
     fun load() {
-        if (call?.isCanceled == false && !call?.isExecuted)
+        if (call?.isCanceled == false && !call.isExecuted)
             call.clone().enqueue(this)
         else Unit
     }
@@ -17,6 +17,7 @@ class RetrofitLiveData<T>(private val call: Call<T>?) : LiveData<T>(), Callback<
     fun cancel() = if (call?.isCanceled == false) call.cancel() else Unit
 
     override fun onFailure(call: Call<T>?, t: Throwable?) {
+        value = null
     }
 
     override fun onResponse(call: Call<T>?, response: Response<T>?) {

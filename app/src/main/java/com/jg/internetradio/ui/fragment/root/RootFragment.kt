@@ -28,7 +28,7 @@ class RootFragment : Fragment(), OnFragmentChange, OnCategoryClick {
 
     override fun onClick(category: Category) {
         activity?.supportFragmentManager?.beginTransaction()
-                ?.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_out, R.anim.abc_fade_in)
+                ?.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_in, R.anim.abc_fade_out)
                 ?.replace(R.id.container, StationListFragment.newInstance(category, this), "StationListFragment")
                 ?.addToBackStack("StationListFragment")
                 ?.commit()
@@ -41,6 +41,7 @@ class RootFragment : Fragment(), OnFragmentChange, OnCategoryClick {
 
     private fun showCategoryList() {
         activity?.supportFragmentManager?.beginTransaction()
+                ?.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_in, R.anim.abc_fade_out)
                 ?.replace(R.id.container, CategoryListFragment.newInstance(this,this))
                 ?.commit()
     }

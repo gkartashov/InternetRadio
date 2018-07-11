@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin8dp">8dp</dimen>
+    <dimen name="margin4dp">4dp</dimen>
+    <dimen name="text20sp">20sp</dimen>
+    <dimen name="imageWidth16dp">16dp</dimen>
+    <dimen name="text16sp">16sp</dimen>
+    <dimen name="stationImageLarge">200dp</dimen>
+    <dimen name="playButtonSize">48dp</dimen>
+    <dimen name="playButtonMarginTop">48dp</dimen>
+    <dimen name="toolbarPadding">16dp</dimen>
+    <dimen name="stationThumbnailSize">64dp</dimen>
+</resources>

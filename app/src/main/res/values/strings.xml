@@ -1,5 +1,10 @@
 <resources>
-    <string name="app_name">InternetRadio</string>
+    <string name="app_name">Internet Radio</string>
     <string name="apiKeyString">e77cf64810184989ab4554d099</string>
-    <string name="hello_blank_fragment">Player</string>
+    <string name="defaultStationTitle">No media source</string>
+    <string name="defaultCategoryTitle">No categories</string>
+    <string name="stationImageDescription">Station image</string>
+    <string name="playButtonDescription">Play</string>
+    <string name="stationListItemDescription">Station image</string>
+    <string name="expandedArrowDescription">Expand/collapse description</string>
 </resources>

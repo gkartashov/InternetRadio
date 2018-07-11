@@ -11,8 +11,6 @@ import com.jg.internetradio.ui.fragment.stationlist.OnStationClick
 import com.jg.internetradio.ui.misc.PagerViewAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
-
-
 class MainActivity : AppCompatActivity(), OnStationClick{
     private val pagerViewAdapter = PagerViewAdapter(supportFragmentManager)
     private lateinit var playListener: OnPlayStart

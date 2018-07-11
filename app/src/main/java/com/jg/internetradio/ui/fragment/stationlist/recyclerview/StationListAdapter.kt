@@ -1,6 +1,8 @@
 package com.jg.internetradio.ui.fragment.stationlist.recyclerview
 
+import android.content.Context
 import android.databinding.DataBindingUtil
+import android.support.v4.widget.CircularProgressDrawable
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,12 +11,21 @@ import com.jg.internetradio.R
 import com.jg.internetradio.databinding.StationListItemBinding
 import com.jg.internetradio.entity.Station
 import com.jg.internetradio.ui.fragment.stationlist.OnStationClick
+import com.jg.internetradio.ui.misc.getRequestOptions
 
-class StationListAdapter(var stations: List<Station> = emptyList(),
-                         private  val listener: OnStationClick) : RecyclerView.Adapter<StationListAdapter.ViewHolder>() {
+class StationListAdapter(private val context: Context?,
+                         private val listener: OnStationClick,
+                         var stations: List<Station> = emptyList()) : RecyclerView.Adapter<StationListAdapter.ViewHolder>() {
     class ViewHolder(val binding: StationListItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind() {
-            Glide.with(binding.root).load(binding.station?.image?.thumb?.url?.trim()).into(binding.stationThumb)
+        fun bind(context: Context?) {
+            val circularProgressDrawable = CircularProgressDrawable(context!!)
+            circularProgressDrawable.start()
+
+            Glide
+                    .with(binding.root)
+                    .setDefaultRequestOptions(getRequestOptions(circularProgressDrawable))
+                    .load(binding.station?.image?.thumb?.url?.trim())
+                    .into(binding.stationThumb)
         }
     }
 
@@ -31,7 +42,7 @@ class StationListAdapter(var stations: List<Station> = emptyList(),
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.station = stations[position]
-        holder.bind()
+        holder.bind(context)
     }
 
     override fun getItemId(position: Int) = stations[position].id.toLong()

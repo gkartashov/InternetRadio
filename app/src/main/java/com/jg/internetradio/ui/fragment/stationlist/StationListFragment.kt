@@ -42,7 +42,7 @@ class StationListFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_station_list, container,false)
         binding.stationListViewModel = ViewModelProviders.of(this, factory).get(StationListViewModel::class.java)
 
-        stationListAdapter = StationListAdapter(listener = activity as OnStationClick)
+        stationListAdapter = StationListAdapter(activity?.applicationContext, activity as OnStationClick)
 
         binding.stationListRecyclerView.adapter = stationListAdapter
         binding.stationListRecyclerView.addItemDecoration(marginDecorator(context))

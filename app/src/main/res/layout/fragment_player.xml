@@ -1,14 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragment.player.PlayerFragment">
+<layout>
+    <data>
+        <variable
+            name="playerViewModel"
+            type="com.jg.internetradio.viewmodel.PlayerViewModel" />
+    </data>
 
-    <TextView
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/hello_blank_fragment" />
+        tools:context=".ui.fragment.player.PlayerFragment">
 
-</LinearLayout>
+        <ImageView
+            android:id="@+id/player_image"
+            android:padding="@dimen/margin8dp"
+            android:layout_width="@dimen/stationImageLarge"
+            android:layout_height="@dimen/stationImageLarge"
+            android:layout_margin="@dimen/margin8dp"
+            android:background="@color/colorBackgroundStationImage"
+            android:contentDescription="@string/stationImageDescription"
+            android:src="@drawable/ic_note" />
+
+        <TextView
+            android:id="@+id/player_station_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin8dp"
+            android:text="@string/defaultStationTitle"
+            android:textSize="@dimen/text20sp" />
+
+        <TextView
+            android:id="@+id/player_category_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin8dp"
+            android:text="@string/defaultCategoryTitle"
+            android:textSize="@dimen/text16sp" />
+
+        <ImageView
+            android:id="@+id/player_play_button"
+            android:contentDescription="@string/playButtonDescription"
+            android:layout_width="@dimen/playButtonSize"
+            android:layout_height="@dimen/playButtonSize"
+            android:layout_marginTop="@dimen/playButtonMarginTop"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_play" />
+    </LinearLayout>
+</layout>

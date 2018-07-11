@@ -18,9 +18,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/colorPrimary"
-            android:paddingEnd="15dp"
-            android:paddingStart="15dp"
-            android:layout_gravity="center_horizontal"
+            android:paddingEnd="@dimen/toolbarPadding"
+            android:paddingStart="0dp"
+            android:layout_gravity="center"
             app:layout_scrollFlags="scroll|enterAlways"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             tools:title="Categories">
