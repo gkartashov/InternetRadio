@@ -16,15 +16,13 @@ import com.bumptech.glide.Glide
 import com.jg.internetradio.R
 import com.jg.internetradio.databinding.FragmentPlayerBinding
 import com.jg.internetradio.entity.Station
-import com.jg.internetradio.ui.fragment.OnPlayStart
 import com.jg.internetradio.viewmodel.PlayerViewModel
 import com.jg.internetradio.ui.misc.getRequestOptions
 
-
-class PlayerFragment : Fragment(), OnPlayStart {
+class PlayerFragment : Fragment() {
     private lateinit var binding: FragmentPlayerBinding
 
-    override fun onStart(station: Station) {
+    fun play(station: Station) {
         binding.playerViewModel?.addSource(station)
         binding.playerViewModel?.play()
     }
@@ -43,6 +41,7 @@ class PlayerFragment : Fragment(), OnPlayStart {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             binding.playerImage.elevation = 10f
         }
+
         return binding.root
     }
 

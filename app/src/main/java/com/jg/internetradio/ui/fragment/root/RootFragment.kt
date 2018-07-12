@@ -12,9 +12,12 @@ import com.jg.internetradio.ui.fragment.OnFragmentChange
 import com.jg.internetradio.ui.fragment.categorylist.CategoryListFragment
 import com.jg.internetradio.ui.fragment.categorylist.OnCategoryClick
 import com.jg.internetradio.ui.fragment.stationlist.StationListFragment
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_root.*
 
 class RootFragment : Fragment(), OnFragmentChange, OnCategoryClick {
+    val stationListFragmentSubject = PublishSubject.create<StationListFragment>()
+
     companion object {
         fun newInstance() = RootFragment()
     }
@@ -27,11 +30,15 @@ class RootFragment : Fragment(), OnFragmentChange, OnCategoryClick {
     }
 
     override fun onClick(category: Category) {
+        val stationListFragment = StationListFragment.newInstance(category, this)
+
         activity?.supportFragmentManager?.beginTransaction()
                 ?.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_in, R.anim.abc_fade_out)
-                ?.replace(R.id.container, StationListFragment.newInstance(category, this), "StationListFragment")
+                ?.replace(R.id.container, stationListFragment, "StationListFragment")
                 ?.addToBackStack("StationListFragment")
                 ?.commit()
+
+        stationListFragmentSubject.onNext(stationListFragment)
     }
 
     override fun onChange(title: String) {
