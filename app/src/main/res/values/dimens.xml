@@ -6,8 +6,10 @@
     <dimen name="imageWidth16dp">16dp</dimen>
     <dimen name="text16sp">16sp</dimen>
     <dimen name="stationImageLarge">200dp</dimen>
-    <dimen name="playButtonSize">48dp</dimen>
+    <dimen name="playButtonSize">58dp</dimen>
     <dimen name="playButtonMarginTop">48dp</dimen>
     <dimen name="toolbarPadding">16dp</dimen>
     <dimen name="stationThumbnailSize">64dp</dimen>
+    <dimen name="stopButtonSize">28dp</dimen>
+    <dimen name="margin48dp">48dp</dimen>
 </resources>

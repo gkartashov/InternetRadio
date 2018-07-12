@@ -17,13 +17,12 @@
 
         <ImageView
             android:id="@+id/player_image"
-            android:padding="@dimen/margin8dp"
             android:layout_width="@dimen/stationImageLarge"
             android:layout_height="@dimen/stationImageLarge"
             android:layout_margin="@dimen/margin8dp"
             android:background="@color/colorBackgroundStationImage"
             android:contentDescription="@string/stationImageDescription"
-            android:src="@drawable/ic_note" />
+            android:src="@drawable/default_image" />
 
         <TextView
             android:id="@+id/player_station_title"
@@ -31,8 +30,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/margin8dp"
+            android:layout_marginEnd="@dimen/margin8dp"
+            android:layout_marginStart="@dimen/margin8dp"
             android:text="@string/defaultStationTitle"
-            android:textSize="@dimen/text20sp" />
+            android:textSize="@dimen/text20sp"
+            android:textAlignment="center"
+            style="@style/TextAppearance.AppCompat.Large"/>
 
         <TextView
             android:id="@+id/player_category_title"
@@ -40,18 +43,47 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/margin8dp"
+            android:layout_marginEnd="@dimen/margin8dp"
+            android:layout_marginStart="@dimen/margin8dp"
             android:text="@string/defaultCategoryTitle"
+            android:textAlignment="center"
             android:textSize="@dimen/text16sp" />
 
-        <ImageView
-            android:id="@+id/player_play_button"
-            android:contentDescription="@string/playButtonDescription"
-            android:layout_width="@dimen/playButtonSize"
-            android:layout_height="@dimen/playButtonSize"
-            android:layout_marginTop="@dimen/playButtonMarginTop"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_play" />
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/playButtonMarginTop">
+
+            <Button
+                android:id="@+id/player_station_list_button"
+                android:contentDescription="@string/stationListButtonDescription"
+                android:layout_width="@dimen/stopButtonSize"
+                android:layout_height="@dimen/stopButtonSize"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/ic_stationlist" />
+
+            <Button
+                android:id="@+id/player_play_button"
+                android:contentDescription="@string/playButtonDescription"
+                android:layout_width="@dimen/playButtonSize"
+                android:layout_height="@dimen/playButtonSize"
+                android:layout_marginStart="@dimen/margin48dp"
+                android:layout_marginEnd="@dimen/margin48dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/ic_play" />
+
+            <Button
+                android:id="@+id/player_stop_button"
+                android:contentDescription="@string/stopButtonDescription"
+                android:layout_width="@dimen/stopButtonSize"
+                android:layout_height="@dimen/stopButtonSize"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/ic_stop" />
+        </LinearLayout>
     </LinearLayout>
 </layout>

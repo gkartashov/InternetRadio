@@ -21,6 +21,28 @@ class MainActivity : AppCompatActivity(){
 
         main_activity_pager.setPageTransformer(false, customTransformer())
 
+        subscribeActivity()
+    }
+
+    override fun onBackPressed() {
+        when {
+            main_activity_pager.currentItem == 1 -> {
+                if (supportFragmentManager.findFragmentByTag(StationListFragment::javaClass.name) == null)
+                    supportFragmentManager.popBackStackImmediate()
+                super.onBackPressed()
+            }
+            supportFragmentManager.findFragmentByTag(StationListFragment::javaClass.name) != null -> supportFragmentManager.popBackStackImmediate()
+            else -> super.onBackPressed()
+        }
+    }
+
+    private fun subscribeActivity() {
+        pagerViewAdapter.rootFragment.playerSubject.subscribe { main_activity_pager.currentItem = 1 }
+
+        pagerViewAdapter.playerFragment.playerSubject.subscribe {
+            main_activity_pager.currentItem = 0
+        }
+
         pagerViewAdapter.rootFragment.stationListFragmentSubject.subscribe {
             stationListFragment = it
 

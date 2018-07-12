@@ -54,7 +54,7 @@ class StationListFragment : Fragment(), OnStationClick {
         binding.stationListRecyclerView.adapter = stationListAdapter
         binding.stationListRecyclerView.addItemDecoration(marginDecorator(context))
 
-        listener.onChange("${category.title} stations")
+        listener.onChange(category.title)
 
         subscribeUI()
 
@@ -63,10 +63,13 @@ class StationListFragment : Fragment(), OnStationClick {
 
     private fun subscribeUI() {
         binding.stationListViewModel?.stationList?.observe(this, Observer<List<Station>> { t ->
+            binding.stationListProgress.visibility = View.GONE
             if (t != null) {
+                binding.stationListRecyclerView.visibility = View.VISIBLE
                 stationListAdapter.stations = t
                 stationListAdapter.notifyDataSetChanged()
-            }
+            } else
+                binding.stationListError.visibility = View.VISIBLE
         })
     }
 

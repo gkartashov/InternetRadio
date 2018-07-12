@@ -2,9 +2,14 @@
     <string name="app_name">Internet Radio</string>
     <string name="apiKeyString">e77cf64810184989ab4554d099</string>
     <string name="defaultStationTitle">No media source</string>
-    <string name="defaultCategoryTitle">No categories</string>
+    <string name="defaultCategoryTitle">No genres</string>
     <string name="stationImageDescription">Station image</string>
     <string name="playButtonDescription">Play</string>
     <string name="stationListItemDescription">Station image</string>
     <string name="expandedArrowDescription">Expand/collapse description</string>
+    <string name="nothingToShow">Nothing to show</string>
+    <string name="genreTitle">Genres</string>
+    <string name="stopButtonDescription">Stop</string>
+    <string name="stationListButtonDescription">Station list</string>
+    <string name="playerButtonDescription">Player</string>
 </resources>

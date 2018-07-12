@@ -2,7 +2,6 @@ package com.jg.internetradio.ui.fragment.stationlist.recyclerview
 
 import android.content.Context
 import android.databinding.DataBindingUtil
-import android.support.v4.widget.CircularProgressDrawable
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import com.jg.internetradio.R
 import com.jg.internetradio.databinding.StationListItemBinding
 import com.jg.internetradio.entity.Station
 import com.jg.internetradio.ui.fragment.stationlist.OnStationClick
+import com.jg.internetradio.ui.misc.circularProgressDrawable
 import com.jg.internetradio.ui.misc.getRequestOptions
 
 class StationListAdapter(private val context: Context?,
@@ -18,12 +18,9 @@ class StationListAdapter(private val context: Context?,
                          var stations: List<Station> = emptyList()) : RecyclerView.Adapter<StationListAdapter.ViewHolder>() {
     class ViewHolder(val binding: StationListItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(context: Context?) {
-            val circularProgressDrawable = CircularProgressDrawable(context!!)
-            circularProgressDrawable.start()
-
             Glide
                     .with(binding.root)
-                    .setDefaultRequestOptions(getRequestOptions(circularProgressDrawable))
+                    .setDefaultRequestOptions(getRequestOptions(circularProgressDrawable(context!!)))
                     .load(binding.station?.image?.thumb?.url?.trim())
                     .into(binding.stationThumb)
         }

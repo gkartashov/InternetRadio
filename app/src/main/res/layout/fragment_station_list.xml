@@ -10,11 +10,35 @@
             type="com.jg.internetradio.viewmodel.StationListViewModel" />
     </data>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/station_list_recycler_view"
-        android:scrollbars="vertical"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:listitem="@layout/station_list_item"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/station_list_error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/nothingToShow"
+            android:visibility="gone"/>
+
+        <ProgressBar
+            android:id="@+id/station_list_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="?android:attr/actionBarSize"
+            android:layout_gravity="center" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/station_list_recycler_view"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            tools:listitem="@layout/station_list_item"/>
+
+    </LinearLayout>
 </layout>

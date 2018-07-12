@@ -5,4 +5,4 @@ import com.bumptech.glide.request.RequestOptions
 import com.jg.internetradio.R
 
 fun getRequestOptions(placeholder: Drawable?): RequestOptions =
-    RequestOptions().placeholder(placeholder).fallback(R.drawable.ic_note)
+    RequestOptions().placeholder(placeholder).fallback(R.drawable.default_thumb)

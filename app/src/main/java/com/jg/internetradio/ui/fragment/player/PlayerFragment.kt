@@ -18,17 +18,25 @@ import com.jg.internetradio.databinding.FragmentPlayerBinding
 import com.jg.internetradio.entity.Station
 import com.jg.internetradio.viewmodel.PlayerViewModel
 import com.jg.internetradio.ui.misc.getRequestOptions
+import io.reactivex.subjects.PublishSubject
 
 class PlayerFragment : Fragment() {
-    private lateinit var binding: FragmentPlayerBinding
-
-    fun play(station: Station) {
-        binding.playerViewModel?.addSource(station)
-        binding.playerViewModel?.play()
-    }
-
     companion object {
         fun newInstance() = PlayerFragment()
+    }
+
+
+    val playerSubject = PublishSubject.create<Int>()
+    private lateinit var binding: FragmentPlayerBinding
+
+    private val playButtonListener: (Boolean) -> Unit = {
+        if (it) {
+            binding.playerViewModel?.stop()
+            binding.playerPlayButton.setBackgroundResource(R.drawable.ic_play)
+        } else {
+            binding.playerViewModel?.play()
+            binding.playerPlayButton.setBackgroundResource(R.drawable.ic_pause)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +44,8 @@ class PlayerFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_player, container,false)
         binding.playerViewModel = ViewModelProviders.of(this).get(PlayerViewModel::class.java)
 
+        initUI()
+        setButtonListeners()
         subscribeUI()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -45,34 +55,52 @@ class PlayerFragment : Fragment() {
         return binding.root
     }
 
-    private fun subscribeUI() {
-        val listener: (Boolean) -> Unit = {
-            if (it) {
-                binding.playerViewModel?.stop()
-                binding.playerPlayButton.setImageResource(R.drawable.ic_play)
-            } else {
-                binding.playerViewModel?.play()
-                binding.playerPlayButton.setImageResource(R.drawable.ic_pause)
-            }
-        }
-
-        binding.playerViewModel?.observeToStation(this, Observer { t ->
-            if (t != null) {
-                binding.playerStationTitle.text = t.name
-                binding.playerPlayButton.setImageResource(R.drawable.ic_pause)
-                binding.playerCategoryTitle.text = binding.playerViewModel?.categoriesToString()
-                binding.playerPlayButton.setOnClickListener { listener.invoke(binding.playerViewModel?.isPlaying!!) }
-
-                Glide
-                        .with(binding.root)
-                        .setDefaultRequestOptions(getRequestOptions(ContextCompat.getDrawable(activity?.applicationContext!!,R.drawable.ic_note)))
-                        .load(t.image?.url)
-                        .into(binding.playerImage)
-            } else {
-                binding.playerCategoryTitle.text = resources.getString(R.string.defaultCategoryTitle)
-                binding.playerStationTitle.text = resources.getString(R.string.defaultStationTitle)
-                binding.playerImage.setImageResource(R.drawable.ic_note)
-            }
-        })
+    private fun initUI(): Unit = with(binding) {
+        playerPlayButton.isClickable = false
+        playerStopButton.isClickable = false
+        playerCategoryTitle.text = resources.getString(R.string.defaultCategoryTitle)
+        playerStationTitle.text = resources.getString(R.string.defaultStationTitle)
+        playerImage.setImageResource(R.drawable.default_image)
+        playerPlayButton.setBackgroundResource(R.drawable.ic_play)
     }
+
+    private fun setButtonListeners(): Unit = with(binding) {
+        playerPlayButton.setOnClickListener { playButtonListener.invoke(playerViewModel?.isPlaying!!) }
+        playerStopButton.setOnClickListener {
+            playerViewModel?.stop()
+            playerViewModel?.removeSource()
+            playerPlayButton.isClickable = false
+            playerStopButton.isClickable = false
+        }
+        playerStationListButton.setOnClickListener { playerSubject.onNext(0) }
+    }
+
+    private fun subscribeUI() {
+        val fragment = this
+
+        with(binding) {
+            playerViewModel?.observeToStation(fragment, Observer { t ->
+                if (t != null) {
+                    playerStopButton.isClickable = true
+                    playerPlayButton.isClickable = true
+                    playerStationTitle.text = t.name
+                    playerPlayButton.setBackgroundResource(R.drawable.ic_pause)
+                    playerCategoryTitle.text = playerViewModel?.categoriesToString()
+
+                    Glide
+                            .with(root)
+                            .setDefaultRequestOptions(getRequestOptions(ContextCompat.getDrawable(activity?.applicationContext!!, R.drawable.default_image)))
+                            .load(t.image?.url)
+                            .into(playerImage)
+                } else
+                    initUI()
+            })
+        }
+    }
+
+    fun play(station: Station): Unit = with(binding) {
+        playerViewModel?.addSource(station)
+        playerViewModel?.play()
+    }
+
 }

@@ -22,6 +22,7 @@ class CategoryListFragment : Fragment() {
     private lateinit var binding: FragmentCategoryListBinding
     private lateinit var categoryListAdapter: CategoryListAdapter
 
+
     companion object {
         lateinit var onFragmentChange: OnFragmentChange
         lateinit var onCategoryClick: OnCategoryClick
@@ -42,7 +43,7 @@ class CategoryListFragment : Fragment() {
         binding.categoryListRecyclerView.adapter = categoryListAdapter
         binding.categoryListRecyclerView.addItemDecoration(marginDecorator(context))
 
-        onFragmentChange.onChange("Categories")
+        onFragmentChange.onChange(getString(R.string.genreTitle))
 
         subscribeUI()
 
@@ -51,10 +52,13 @@ class CategoryListFragment : Fragment() {
 
     private fun subscribeUI() {
         binding.categoryListViewModel?.categoryList?.observe(this, Observer<List<Category>> { t ->
+            binding.categoryListProgress.visibility = View.GONE
             if (t != null) {
+                binding.categoryListRecyclerView.visibility = View.VISIBLE
                 categoryListAdapter.categories = t
                 categoryListAdapter.notifyDataSetChanged()
-            }
+            } else
+                binding.categoryListError.visibility = View.VISIBLE
         })
     }
 }

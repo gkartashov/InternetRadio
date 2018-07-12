@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item>
+        <shape android:shape="rectangle">
+            <padding
+                android:left="@dimen/margin4dp"
+                android:top="@dimen/margin4dp"
+                android:right="@dimen/margin4dp"
+                android:bottom="@dimen/margin4dp" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/ic_note"/>
+</layer-list>
