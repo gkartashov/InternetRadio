@@ -8,7 +8,7 @@ import com.jg.internetradio.ui.fragment.root.RootFragment
 
 class PagerViewAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
     val rootFragment = RootFragment.newInstance()
-    val playerFragment = PlayerFragment.newInstance()
+    val playerFragment = PlayerFragment.newInstance(rootFragment::showCategoryList)
 
     override fun getItem(position: Int) = when(position) {
         0 -> rootFragment

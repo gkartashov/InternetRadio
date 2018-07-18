@@ -13,27 +13,22 @@ import com.jg.internetradio.R
 import com.jg.internetradio.databinding.FragmentStationListBinding
 import com.jg.internetradio.entity.Category
 import com.jg.internetradio.entity.Station
-import com.jg.internetradio.ui.fragment.OnFragmentChange
 import com.jg.internetradio.ui.fragment.stationlist.recyclerview.StationListAdapter
 import com.jg.internetradio.ui.misc.marginDecorator
 import com.jg.internetradio.viewmodel.StationListViewModel
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.disposables.Disposable
 
-class StationListFragment : Fragment(), OnStationClick {
-    override fun onClick(station: Station) {
-        onStationClickedSubject.onNext(station)
-    }
-
+class StationListFragment : Fragment() {
     private lateinit var binding: FragmentStationListBinding
     private lateinit var stationListAdapter: StationListAdapter
-
-    val onStationClickedSubject = PublishSubject.create<Station>()
+    private lateinit var itemClickSubscription: Disposable
 
     companion object {
-        lateinit var listener: OnFragmentChange
-        fun newInstance(category: Category, listener: OnFragmentChange) : StationListFragment {
-
-            this.listener = listener
+        lateinit var itemClickAction: () -> Unit
+        lateinit var stationPlayAction: (Station) -> Unit
+        fun newInstance(category: Category, itemClickAction: () -> Unit, stationPlayAction: (Station) -> Unit) : StationListFragment {
+            this.itemClickAction = itemClickAction
+            this.stationPlayAction = stationPlayAction
             val fragment = StationListFragment()
             val args = Bundle()
             args.putSerializable("Category", category)
@@ -49,12 +44,15 @@ class StationListFragment : Fragment(), OnStationClick {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_station_list, container,false)
         binding.stationListViewModel = ViewModelProviders.of(this, factory).get(StationListViewModel::class.java)
 
-        stationListAdapter = StationListAdapter(activity?.applicationContext, this)
+        stationListAdapter = StationListAdapter(activity?.applicationContext)
+
+        itemClickSubscription = stationListAdapter.clickObservable.subscribe {
+            itemClickAction.invoke()
+            stationPlayAction.invoke(it)
+        }
 
         binding.stationListRecyclerView.adapter = stationListAdapter
         binding.stationListRecyclerView.addItemDecoration(marginDecorator(context))
-
-        listener.onChange(category.title)
 
         subscribeUI()
 

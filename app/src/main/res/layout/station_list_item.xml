@@ -7,9 +7,6 @@
         <variable
             name="station"
             type="com.jg.internetradio.entity.Station" />
-        <variable
-            name="callback"
-            type="com.jg.internetradio.ui.fragment.stationlist.OnStationClick"/>
     </data>
     <android.support.v7.widget.CardView
         android:id="@+id/station_list_card_view"
@@ -22,8 +19,7 @@
         android:layout_marginBottom="@dimen/margin4dp"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:onClickListener="@{() -> callback.onClick(station)}">
+        android:foreground="?android:attr/selectableItemBackground">
 
 
         <RelativeLayout

@@ -8,9 +8,6 @@
         <variable
             name="category"
             type="com.jg.internetradio.entity.Category" />
-        <variable
-            name="callback"
-            type="com.jg.internetradio.ui.fragment.categorylist.OnCategoryClick"/>
     </data>
         <android.support.v7.widget.CardView
             android:id="@+id/category_list_card_view"
@@ -21,7 +18,6 @@
             android:layout_marginEnd="@dimen/margin8dp"
             android:layout_marginTop="@dimen/margin4dp"
             android:layout_marginBottom="@dimen/margin4dp"
-            app:onClickListener="@{() -> callback.onClick(category)}"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground">

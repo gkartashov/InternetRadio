@@ -8,17 +8,14 @@ import android.view.ViewGroup
 
 import com.jg.internetradio.R
 import com.jg.internetradio.entity.Category
-import com.jg.internetradio.ui.fragment.OnFragmentChange
-import com.jg.internetradio.ui.fragment.categorylist.CategoryListFragment
-import com.jg.internetradio.ui.fragment.categorylist.OnCategoryClick
-import com.jg.internetradio.ui.fragment.stationlist.StationListFragment
+import com.jg.internetradio.ui.misc.TransitionHandler
+import com.jg.internetradio.ui.misc.TransitionStates
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_root.*
 import kotlinx.android.synthetic.main.fragment_root.view.*
 
-class RootFragment : Fragment(), OnFragmentChange, OnCategoryClick {
-    val stationListFragmentSubject = PublishSubject.create<StationListFragment>()
-    val playerSubject = PublishSubject.create<Int>()
+class RootFragment : Fragment(), TransitionHandler {
+    override val subject: PublishSubject<Any> = PublishSubject.create()
 
     companion object {
         fun newInstance() = RootFragment()
@@ -27,32 +24,20 @@ class RootFragment : Fragment(), OnFragmentChange, OnCategoryClick {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_root, container, false)
-        view.player_button.setOnClickListener { playerSubject.onNext(1) }
-        showCategoryList()
+        subject.onNext(TransitionStates.INIT_ROOT)
+        changeToolbarTitle(getString(R.string.genreTitle))
+        view.player_button.setOnClickListener { showPlayer() }
         return view
     }
 
-    override fun onClick(category: Category) {
-        val stationListFragment = StationListFragment.newInstance(category, this)
+    fun showStationList(category: Category) = subject.onNext(category)
 
-        activity?.supportFragmentManager?.beginTransaction()
-                ?.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_in, R.anim.abc_fade_out)
-                ?.replace(R.id.container, stationListFragment, "StationListFragment")
-                ?.addToBackStack("StationListFragment")
-                ?.commit()
+    fun showPlayer() = subject.onNext(TransitionStates.TO_PLAYER)
 
-        stationListFragmentSubject.onNext(stationListFragment)
-    }
+    fun showCategoryList() = subject.onNext(TransitionStates.TO_CATEGORIES)
 
-    override fun onChange(title: String) {
+    fun changeToolbarTitle(title: String) {
         appbar_layout.setExpanded(true)
         toolbar_title.text = title
-    }
-
-    private fun showCategoryList() {
-        activity?.supportFragmentManager?.beginTransaction()
-                ?.setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out, R.anim.abc_fade_in, R.anim.abc_fade_out)
-                ?.replace(R.id.container, CategoryListFragment.newInstance(this,this))
-                ?.commit()
     }
 }

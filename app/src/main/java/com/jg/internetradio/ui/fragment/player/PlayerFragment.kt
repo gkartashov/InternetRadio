@@ -18,15 +18,16 @@ import com.jg.internetradio.databinding.FragmentPlayerBinding
 import com.jg.internetradio.entity.Station
 import com.jg.internetradio.viewmodel.PlayerViewModel
 import com.jg.internetradio.ui.misc.getRequestOptions
-import io.reactivex.subjects.PublishSubject
 
 class PlayerFragment : Fragment() {
     companion object {
-        fun newInstance() = PlayerFragment()
+        lateinit var toCategoryListAction: () -> Unit
+        fun newInstance(toCategoryListAction: () -> Unit): PlayerFragment {
+            this.toCategoryListAction = toCategoryListAction
+            return PlayerFragment()
+        }
     }
 
-
-    val playerSubject = PublishSubject.create<Int>()
     private lateinit var binding: FragmentPlayerBinding
 
     private val playButtonListener: (Boolean) -> Unit = {
@@ -44,8 +45,8 @@ class PlayerFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_player, container,false)
         binding.playerViewModel = ViewModelProviders.of(this).get(PlayerViewModel::class.java)
 
-        initUI()
         setButtonListeners()
+        initUI()
         subscribeUI()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -72,7 +73,7 @@ class PlayerFragment : Fragment() {
             playerPlayButton.isClickable = false
             playerStopButton.isClickable = false
         }
-        playerStationListButton.setOnClickListener { playerSubject.onNext(0) }
+        playerStationListButton.setOnClickListener { toCategoryListAction.invoke() }
     }
 
     private fun subscribeUI() {
