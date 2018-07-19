@@ -25,7 +25,7 @@ class RootFragment : Fragment(), TransitionHandler {
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_root, container, false)
         subject.onNext(TransitionStates.INIT_ROOT)
-        changeToolbarTitle(getString(R.string.genreTitle))
+        view.toolbar_title.text = getString(R.string.genreTitle)
         view.player_button.setOnClickListener { showPlayer() }
         return view
     }
@@ -35,6 +35,7 @@ class RootFragment : Fragment(), TransitionHandler {
     fun showPlayer() = subject.onNext(TransitionStates.TO_PLAYER)
 
     fun showCategoryList() = subject.onNext(TransitionStates.TO_CATEGORIES)
+
 
     fun changeToolbarTitle(title: String) {
         appbar_layout.setExpanded(true)

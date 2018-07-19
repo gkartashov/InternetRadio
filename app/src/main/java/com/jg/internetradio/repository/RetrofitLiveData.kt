@@ -1,27 +1,28 @@
 package com.jg.internetradio.repository
 
-import android.arch.lifecycle.LiveData
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import android.arch.lifecycle.MutableLiveData
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
-class RetrofitLiveData<T>(private val call: Call<T>?) : LiveData<T>(), Callback<T> {
-    fun load() {
-        if (call?.isCanceled == false && !call.isExecuted)
-            call.clone().enqueue(this)
-        else Unit
+class RetrofitLiveData<T>(private val call: Observable<T>?) : MutableLiveData<T>() {
+
+    fun load(onNextAction: () -> Unit,
+             onErrorAction: () -> Unit) {
+        call
+                ?.subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe({
+                    postValue(it)
+                    onNextAction.invoke()
+                },
+                {
+                    postValue(null)
+                    onErrorAction.invoke()
+                })
     }
 
-    fun clear(){ value = null }
+    fun clear() { value = null }
 
-    fun cancel() = if (call?.isCanceled == false) call.cancel() else Unit
-
-    override fun onFailure(call: Call<T>?, t: Throwable?) {
-        value = null
-    }
-
-    override fun onResponse(call: Call<T>?, response: Response<T>?) {
-        value = response?.body()
-    }
     override fun toString(): String = value.toString()
 }

@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View" />
         <variable
             name="categoryListViewModel"
             type="com.jg.internetradio.viewmodel.CategoryListViewModel" />
@@ -19,7 +20,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/nothingToShow"
-            android:visibility="gone"/>
+            app:isVisible="@{!categoryListViewModel.isLoading &amp;&amp; !categoryListViewModel.isLoaded}"/>
 
         <ProgressBar
             android:id="@+id/category_list_progress"
@@ -27,14 +28,15 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginBottom="?android:attr/actionBarSize"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            app:isVisible="@{categoryListViewModel.isLoading}"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/category_list_recycler_view"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
+            app:isVisible="@{!categoryListViewModel.isLoading &amp;&amp; categoryListViewModel.isLoaded}"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             tools:listitem="@layout/category_list_item"/>
 

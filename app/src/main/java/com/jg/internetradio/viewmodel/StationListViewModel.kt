@@ -24,7 +24,7 @@ class StationListViewModel(application: Application, val category: Category) : A
         load()
     }
 
-    fun load() = stationList?.load()
+    fun load() = stationList?.load ({},{})
 
     fun clear() = stationList?.clear()
 

@@ -35,13 +35,12 @@ class CategoryListFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_category_list, container,false)
         binding.categoryListViewModel = ViewModelProviders.of(this).get(CategoryListViewModel::class.java)
-
+        binding.setLifecycleOwner(this)
         categoryListAdapter = CategoryListAdapter()
 
         itemClickSubscription = categoryListAdapter.clickObservable.subscribe {
             clickAction.invoke(it)
             toolbarChangeAction.invoke(it.title)
-
         }
 
         toolbarChangeAction.invoke(getString(R.string.genreTitle))
@@ -55,13 +54,10 @@ class CategoryListFragment : Fragment() {
 
     private fun subscribeUI() {
         binding.categoryListViewModel?.categoryList?.observe(this, Observer<List<Category>> { t ->
-            binding.categoryListProgress.visibility = View.GONE
             if (t != null) {
-                binding.categoryListRecyclerView.visibility = View.VISIBLE
                 categoryListAdapter.categories = t
                 categoryListAdapter.notifyDataSetChanged()
-            } else
-                binding.categoryListError.visibility = View.VISIBLE
+            }
         })
     }
 }

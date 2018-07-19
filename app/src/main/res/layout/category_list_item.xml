@@ -6,6 +6,9 @@
     <data>
         <import type="android.view.View" />
         <variable
+            name="isExpanded"
+            type="Boolean" />
+        <variable
             name="category"
             type="com.jg.internetradio.entity.Category" />
     </data>
@@ -20,7 +23,8 @@
             android:layout_marginBottom="@dimen/margin4dp"
             android:clickable="true"
             android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground">
+            android:foreground="?android:attr/selectableItemBackground"
+            app:isActivated="@{isExpanded}">
 
             <RelativeLayout
                 android:id="@+id/category_list_layout"
@@ -43,6 +47,7 @@
                     android:layout_below="@+id/category_title"
                     android:visibility="visible"
                     tools:text="Lorem ipsum"
+                    app:isVisible="@{!category.description.empty &amp;&amp; isExpanded}"
                     android:text="@{category.capitalize(category.description)}" />
 
                 <ImageView
@@ -51,7 +56,8 @@
                     android:layout_height="@dimen/imageWidth16dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignTop="@id/category_title"
-                    android:src="@drawable/ic_down_arrow"
+                    android:src="@{isExpanded ? @drawable/ic_up_arrow : @drawable/ic_down_arrow}"
+                    app:isVisible="@{!category.description.empty}"
                     android:contentDescription="@string/expandedArrowDescription" />
 
             </RelativeLayout>
