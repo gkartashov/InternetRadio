@@ -22,12 +22,12 @@ class CategoryListAdapter(var categories: List<Category> = emptyList(),
             }
             isExpanded = expandablePosition.contains(position)
             categoryListCardView.setOnLongClickListener {
-                if (isExpanded == true)
+                if (isExpanded)
                     expandablePosition.remove(position)
                 else
                     expandablePosition.add(position)
                 notifier(position)
-                isExpanded ?: true
+                isExpanded
 
                 }
             executePendingBindings()

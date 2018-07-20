@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="android.text.TextUtils"/>
         <variable
             name="playerViewModel"
             type="com.jg.internetradio.viewmodel.PlayerViewModel" />
@@ -22,7 +23,8 @@
             android:layout_margin="@dimen/margin8dp"
             android:background="@color/colorBackgroundStationImage"
             android:contentDescription="@string/stationImageDescription"
-            android:src="@drawable/default_image" />
+            app:imageUrl='@{safeUnbox(playerViewModel.isStationAdded) ? playerViewModel.stationImageUrl() : ""}'
+            app:errorDrawable="@{@drawable/default_image}" />
 
         <TextView
             android:id="@+id/player_station_title"
@@ -32,7 +34,7 @@
             android:layout_marginTop="@dimen/margin8dp"
             android:layout_marginEnd="@dimen/margin8dp"
             android:layout_marginStart="@dimen/margin8dp"
-            android:text="@string/defaultStationTitle"
+            android:text="@{safeUnbox(playerViewModel.isStationAdded) ? playerViewModel.stationName() : @string/defaultStationTitle}"
             android:textSize="@dimen/text20sp"
             android:textAlignment="center"
             style="@style/TextAppearance.AppCompat.Large"/>
@@ -45,7 +47,7 @@
             android:layout_marginTop="@dimen/margin8dp"
             android:layout_marginEnd="@dimen/margin8dp"
             android:layout_marginStart="@dimen/margin8dp"
-            android:text="@string/defaultCategoryTitle"
+            android:text="@{safeUnbox(playerViewModel.isStationAdded) ? playerViewModel.categoriesToString() : @string/defaultCategoryTitle}"
             android:textAlignment="center"
             android:textSize="@dimen/text16sp" />
 
@@ -72,18 +74,20 @@
                 android:layout_height="@dimen/playButtonSize"
                 android:layout_marginStart="@dimen/margin48dp"
                 android:layout_marginEnd="@dimen/margin48dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="@drawable/ic_play" />
+                android:clickable="@{safeUnbox(playerViewModel.isStationAdded)}"
+                android:focusable="@{safeUnbox(playerViewModel.isStationAdded)}"
+                android:background="@{safeUnbox(playerViewModel.isPlaying) ? @drawable/ic_pause : @drawable/ic_play}"
+                android:onClick="@{() -> safeUnbox(playerViewModel.isPlaying) ? playerViewModel.stop() : playerViewModel.play()}"/>
 
             <Button
                 android:id="@+id/player_stop_button"
                 android:contentDescription="@string/stopButtonDescription"
                 android:layout_width="@dimen/stopButtonSize"
                 android:layout_height="@dimen/stopButtonSize"
-                android:clickable="true"
+                android:clickable="@{safeUnbox(playerViewModel.isStationAdded)}"
                 android:focusable="true"
-                android:background="@drawable/ic_stop" />
+                android:background="@drawable/ic_stop"
+                android:onClick="@{() -> playerViewModel.removeSource()}"/>
         </LinearLayout>
     </LinearLayout>
 </layout>

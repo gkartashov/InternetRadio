@@ -33,7 +33,9 @@
                 android:layout_width="@dimen/stationThumbnailSize"
                 android:layout_height="@dimen/stationThumbnailSize"
                 android:contentDescription="@string/stationListItemDescription"
-                android:background="@color/colorBackground"/>
+                android:background="@color/colorBackground"
+                app:imageUrl="@{station.image.thumb.url}"
+                app:errorDrawable="@{@drawable/default_thumb}"/>
 
             <TextView
                 android:id="@+id/station_title"
@@ -69,7 +71,6 @@
                 android:textAlignment="viewEnd"
                 android:text="@{`Total listeners: ` + station.totalListeners}"
                 tools:text="Total listeners: 10"/>
-
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

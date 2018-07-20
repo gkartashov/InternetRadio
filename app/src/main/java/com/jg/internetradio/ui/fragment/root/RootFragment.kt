@@ -36,7 +36,6 @@ class RootFragment : Fragment(), TransitionHandler {
 
     fun showCategoryList() = subject.onNext(TransitionStates.TO_CATEGORIES)
 
-
     fun changeToolbarTitle(title: String) {
         appbar_layout.setExpanded(true)
         toolbar_title.text = title

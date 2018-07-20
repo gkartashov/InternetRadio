@@ -10,6 +10,8 @@ import com.jg.internetradio.repository.RetrofitLiveData
 
 
 class StationListViewModel(application: Application, val category: Category) : AndroidViewModel(application) {
+    val isLoading = MutableLiveData<Boolean>()
+    val isLoaded = MutableLiveData<Boolean>()
 
     class Factory(private val application: Application, private val category: Category) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -21,10 +23,12 @@ class StationListViewModel(application: Application, val category: Category) : A
     var stationList : RetrofitLiveData<List<Station>>? = radioRepository.getCategoryStations(category)
 
     init {
+        isLoading.value = true
+        isLoaded.value = true
         load()
     }
 
-    fun load() = stationList?.load ({},{})
+    fun load() = stationList?.load ({ isLoading.value = false },{ isLoaded.value = false })
 
     fun clear() = stationList?.clear()
 

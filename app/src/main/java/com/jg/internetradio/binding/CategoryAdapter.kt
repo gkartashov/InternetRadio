@@ -1,21 +1,32 @@
 package com.jg.internetradio.binding
 
-import android.arch.lifecycle.MutableLiveData
 import android.databinding.BindingAdapter
-import android.databinding.BindingConversion
+import android.graphics.drawable.Drawable
 import android.view.View
+import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.jg.internetradio.ui.misc.circularProgressDrawable
+import com.jg.internetradio.ui.misc.getRequestOptions
 
-@BindingAdapter("app:isVisible")
+
+@BindingAdapter("isVisible")
 fun visibilitySetter(view: View, show: Boolean) {
     view.visibility = if (show) View.VISIBLE else View.GONE
 }
 
-@BindingAdapter("app:isActivated")
+@BindingAdapter("isActivated")
 fun activationSetter(view: View, show: Boolean) {
     view.isActivated = show
 }
 
-@BindingConversion
-fun <T> getMutableLiveDataValue(liveData: MutableLiveData<T>): T {
-    return liveData.value ?: throw IllegalArgumentException("liveData's value shouldn't be null!")
+@BindingAdapter("imageUrl", "errorDrawable")
+fun loadImage(view: ImageView, url: String?, error: Drawable) {
+    if (url.isNullOrEmpty())
+        view.setImageDrawable(error)
+    else
+        Glide
+                .with(view.context)
+                .setDefaultRequestOptions(getRequestOptions(circularProgressDrawable(view.context), error))
+                .load(url?.trim())
+                .into(view)
 }

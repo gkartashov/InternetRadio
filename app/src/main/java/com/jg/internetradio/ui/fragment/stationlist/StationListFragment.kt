@@ -43,8 +43,8 @@ class StationListFragment : Fragment() {
         val factory = StationListViewModel.Factory(activity?.application!!, category)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_station_list, container,false)
         binding.stationListViewModel = ViewModelProviders.of(this, factory).get(StationListViewModel::class.java)
-
-        stationListAdapter = StationListAdapter(activity?.applicationContext)
+        binding.setLifecycleOwner(this)
+        stationListAdapter = StationListAdapter()
 
         itemClickSubscription = stationListAdapter.clickObservable.subscribe {
             itemClickAction.invoke()
@@ -61,13 +61,10 @@ class StationListFragment : Fragment() {
 
     private fun subscribeUI() {
         binding.stationListViewModel?.stationList?.observe(this, Observer<List<Station>> { t ->
-            binding.stationListProgress.visibility = View.GONE
             if (t != null) {
-                binding.stationListRecyclerView.visibility = View.VISIBLE
                 stationListAdapter.stations = t
                 stationListAdapter.notifyDataSetChanged()
-            } else
-                binding.stationListError.visibility = View.VISIBLE
+            }
         })
     }
 
