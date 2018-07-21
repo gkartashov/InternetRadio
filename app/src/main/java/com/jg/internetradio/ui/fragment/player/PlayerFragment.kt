@@ -19,6 +19,7 @@ import com.jg.internetradio.viewmodel.PlayerViewModel
 class PlayerFragment : Fragment() {
     companion object {
         lateinit var toCategoryListAction: () -> Unit
+
         fun newInstance(toCategoryListAction: () -> Unit): PlayerFragment {
             this.toCategoryListAction = toCategoryListAction
             return PlayerFragment()

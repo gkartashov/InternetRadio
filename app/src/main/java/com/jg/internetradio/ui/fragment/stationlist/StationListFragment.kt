@@ -26,9 +26,13 @@ class StationListFragment : Fragment() {
     companion object {
         lateinit var itemClickAction: () -> Unit
         lateinit var stationPlayAction: (Station) -> Unit
-        fun newInstance(category: Category, itemClickAction: () -> Unit, stationPlayAction: (Station) -> Unit) : StationListFragment {
+        lateinit var toolbarChangeAction: (String) -> Unit
+        fun newInstance(category: Category, itemClickAction: () -> Unit,
+                        stationPlayAction: (Station) -> Unit,
+                        toolbarChangeAction: (String) -> Unit) : StationListFragment {
             this.itemClickAction = itemClickAction
             this.stationPlayAction = stationPlayAction
+            this.toolbarChangeAction = toolbarChangeAction
             val fragment = StationListFragment()
             val args = Bundle()
             args.putSerializable("Category", category)
@@ -39,6 +43,7 @@ class StationListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        retainInstance = true
         val category = arguments?.getSerializable("Category") as Category
         val factory = StationListViewModel.Factory(activity?.application!!, category)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_station_list, container,false)
@@ -50,6 +55,9 @@ class StationListFragment : Fragment() {
             itemClickAction.invoke()
             stationPlayAction.invoke(it)
         }
+
+        if (savedInstanceState != null)
+            toolbarChangeAction.invoke(category.title)
 
         binding.stationListRecyclerView.adapter = stationListAdapter
         binding.stationListRecyclerView.addItemDecoration(marginDecorator(context))

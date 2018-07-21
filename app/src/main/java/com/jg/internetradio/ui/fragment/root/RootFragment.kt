@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_root.*
 import kotlinx.android.synthetic.main.fragment_root.view.*
 
 class RootFragment : Fragment(), TransitionHandler {
-    override val subject: PublishSubject<Any> = PublishSubject.create()
+    override var subject: PublishSubject<Any> = PublishSubject.create()
 
     companion object {
         fun newInstance() = RootFragment()
@@ -23,11 +23,17 @@ class RootFragment : Fragment(), TransitionHandler {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        retainInstance = true
         val view = inflater.inflate(R.layout.fragment_root, container, false)
-        subject.onNext(TransitionStates.INIT_ROOT)
-        view.toolbar_title.text = getString(R.string.genreTitle)
         view.player_button.setOnClickListener { showPlayer() }
+        if (savedInstanceState == null)
+            subject.onNext(TransitionStates.INIT_ROOT)
         return view
+    }
+
+    override fun onDestroy() {
+        subject.onComplete()
+        super.onDestroy()
     }
 
     fun showStationList(category: Category) = subject.onNext(category)

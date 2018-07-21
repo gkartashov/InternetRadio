@@ -44,6 +44,7 @@ class CategoryListFragment : Fragment() {
         }
 
         toolbarChangeAction.invoke(getString(R.string.genreTitle))
+
         binding.categoryListRecyclerView.adapter = categoryListAdapter
         binding.categoryListRecyclerView.addItemDecoration(marginDecorator(context))
 
