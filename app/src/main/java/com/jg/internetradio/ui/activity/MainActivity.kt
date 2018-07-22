@@ -50,8 +50,11 @@ class MainActivity : AppCompatActivity(){
                     supportFragmentManager.popBackStackImmediate()
                 super.onBackPressed()
             }
-            supportFragmentManager.findFragmentByTag(StationListFragment::javaClass.name) != null -> supportFragmentManager.popBackStackImmediate()
-            else -> super.onBackPressed()
+            supportFragmentManager.findFragmentByTag("StationListFragment") != null -> supportFragmentManager.popBackStackImmediate()
+            else ->  {
+                supportFragmentManager.popBackStackImmediate()
+                super.onBackPressed()
+            }
         }
     }
 
@@ -76,7 +79,6 @@ class MainActivity : AppCompatActivity(){
                         android.R.animator.fade_in,
                         android.R.animator.fade_out)
                 .replace(R.id.container, CategoryListFragment.newInstance(pagerViewAdapter.rootFragment::changeToolbarTitle, pagerViewAdapter.rootFragment::showStationList), "CategoryListFragment")
-                .addToBackStack("CategoryListFragment")
                 .commitAllowingStateLoss()
     }
 
