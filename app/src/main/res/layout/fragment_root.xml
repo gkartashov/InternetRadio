@@ -24,6 +24,16 @@
                 app:layout_scrollFlags="scroll|enterAlways"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
+                <ImageView
+                    android:id="@+id/back_button"
+                    android:contentDescription="@string/backButtonDescription"
+                    android:layout_width="@dimen/stopButtonSize"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/margin8dp"
+                    android:layout_gravity="center|start"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_arrow_back"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -32,6 +42,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     tools:text="@string/genreTitle"
+                    android:textSize="20sp"
                     style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"/>
 
                 <ImageView

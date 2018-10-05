@@ -1,35 +1,33 @@
 package com.jg.internetradio.viewmodel
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
+import android.arch.lifecycle.*
 
 import com.jg.internetradio.entity.Station
 import com.jg.internetradio.repository.PlayerLiveData
 import com.jg.internetradio.viewmodel.manager.PlayerManager
 
-class PlayerViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val playerManager: PlayerManager = PlayerManager(application.applicationContext)
-    private val observableStation: PlayerLiveData<Station> = PlayerLiveData()
-
+class PlayerViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
     val isStationAdded = MutableLiveData<Boolean>()
     val isPlaying = MutableLiveData<Boolean>()
+
+    private val playerManager = PlayerManager(application.applicationContext)
+    private val observableStation = PlayerLiveData()
 
     init {
         isPlaying.value = false
         isStationAdded.value = false
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun play() {
-        playerManager.play(observableStation.value?.streams?.first()?.stream!!)
-        isPlaying.value = playerManager.isPlaying
+        if (observableStation.isReadyToPlay) {
+            playerManager.play(observableStation.getFirstStream()!!)
+            isPlaying.value = playerManager.isPlaying
+        }
     }
 
-    fun pause() = playerManager.pause()
-
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun stop() {
         playerManager.stop()
         isPlaying.value = false
@@ -46,12 +44,14 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
         isStationAdded.value = false
     }
 
-    fun observeToStation(lifecycleOwner: LifecycleOwner, observer: Observer<Station>) = observableStation.observe(lifecycleOwner, observer)
+    fun observeToStation(lifecycleOwner: LifecycleOwner, observer: Observer<Station>) {
+        observableStation.observe(lifecycleOwner, observer)
+    }
 
-    fun categoriesToString() = observableStation.value?.categoryListToString()
+    fun getCategoriesAsString() = observableStation.getCategoriesAsString()
 
-    fun stationName() = observableStation.value?.name
+    fun getStationName() = observableStation.getStationName()
 
-    fun stationImageUrl() = observableStation.value?.image?.url
+    fun getStationImageUrl() = observableStation.getStationImageUrl()
 
 }

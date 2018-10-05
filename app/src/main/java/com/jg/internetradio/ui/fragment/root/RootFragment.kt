@@ -26,6 +26,7 @@ class RootFragment : Fragment(), TransitionHandler {
         retainInstance = true
         val view = inflater.inflate(R.layout.fragment_root, container, false)
         view.player_button.setOnClickListener { showPlayer() }
+        view.back_button.setOnClickListener { subject.onNext(TransitionStates.BACK) }
         if (savedInstanceState == null)
             subject.onNext(TransitionStates.INIT_ROOT)
         return view
@@ -36,7 +37,10 @@ class RootFragment : Fragment(), TransitionHandler {
         super.onDestroy()
     }
 
-    fun showStationList(category: Category) = subject.onNext(category)
+    fun showStationList(category: Category) {
+        showBackButton(true)
+        subject.onNext(category)
+    }
 
     fun showPlayer() = subject.onNext(TransitionStates.TO_PLAYER)
 
@@ -45,5 +49,9 @@ class RootFragment : Fragment(), TransitionHandler {
     fun changeToolbarTitle(title: String) {
         appbar_layout.setExpanded(true)
         toolbar_title.text = title
+    }
+
+    fun showBackButton(show: Boolean) {
+        back_button.visibility = if (show) View.VISIBLE else View.GONE
     }
 }

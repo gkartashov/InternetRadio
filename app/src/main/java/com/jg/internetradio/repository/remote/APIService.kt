@@ -8,14 +8,10 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface APIService {
-    @GET("v2/categories" )
-    fun getCategories(@Query("token") token: String) : Observable<List<Category>>?
+    @GET("v2/categories")
+    fun getCategories(@Query("token") token: String): Observable<List<Category>>?
 
     @GET("v2/category/{categoryId}/stations")
-    fun getCategoryStations(@Path("categoryId") categoryId : Int,
-                            @Query("token") token: String) : Observable<List<Station>>?
-
-    @GET("v2/station/{station}")
-    fun getStation(@Query("token") token: String,
-                   @Path("station") stationId : Int) : Observable<Station>?
+    fun getCategoryStations(@Path("categoryId") categoryId: Int,
+                            @Query("token") token: String): Observable<List<Station>>?
 }

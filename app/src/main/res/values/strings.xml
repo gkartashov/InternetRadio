@@ -12,4 +12,5 @@
     <string name="stopButtonDescription">Stop</string>
     <string name="stationListButtonDescription">Station list</string>
     <string name="playerButtonDescription">Player</string>
+    <string name="backButtonDescription">Back</string>
 </resources>

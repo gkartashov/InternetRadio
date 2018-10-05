@@ -30,7 +30,7 @@
             android:background="@color/colorBackgroundStationImage"
             android:contentDescription="@string/stationImageDescription"
             app:errorDrawable="@{@drawable/default_image}"
-            app:imageUrl='@{safeUnbox(playerViewModel.isStationAdded) ? playerViewModel.stationImageUrl() : ""}'
+            app:imageUrl='@{safeUnbox(playerViewModel.isStationAdded) ? playerViewModel.getStationImageUrl() : ""}'
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toStartOf="@+id/guideline_vertical"
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
-            android:text="@{safeUnbox(playerViewModel.isStationAdded) ? playerViewModel.stationName() : @string/defaultStationTitle}"
+            android:text="@{safeUnbox(playerViewModel.isStationAdded) ? playerViewModel.getStationName() : @string/defaultStationTitle}"
             android:textAlignment="center"
             android:textSize="@dimen/text20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:text="@{safeUnbox(playerViewModel.isStationAdded) ? playerViewModel.categoriesToString() : @string/defaultCategoryTitle}"
+            android:text="@{safeUnbox(playerViewModel.isStationAdded) ? playerViewModel.getCategoriesAsString() : @string/defaultCategoryTitle}"
             android:textAlignment="center"
             android:textSize="@dimen/text16sp"
             app:layout_constraintEnd_toEndOf="@+id/player_station_title"

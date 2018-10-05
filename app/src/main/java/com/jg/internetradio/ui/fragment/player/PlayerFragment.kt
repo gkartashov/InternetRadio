@@ -32,6 +32,8 @@ class PlayerFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_player, container,false)
         binding.playerViewModel = ViewModelProviders.of(this).get(PlayerViewModel::class.java)
+
+        lifecycle.addObserver(binding.playerViewModel as PlayerViewModel)
         binding.setLifecycleOwner(this)
 
         binding.playerStationListButton.setOnClickListener { toCategoryListAction.invoke() }

@@ -48,7 +48,7 @@
                     android:visibility="visible"
                     tools:text="Lorem ipsum"
                     app:isVisible="@{safeUnbox(!category.description.empty) &amp;&amp; isExpanded}"
-                    android:text="@{category.capitalize(category.description)}" />
+                    android:text="@{category.description}" />
 
                 <ImageView
                     android:id="@+id/arrow_image"

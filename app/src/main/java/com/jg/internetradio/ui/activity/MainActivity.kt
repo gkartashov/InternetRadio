@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity(){
             when (it) {
                 is TransitionStates -> {
                     when (it) {
+                        TransitionStates.BACK -> onBackPressed()
                         TransitionStates.INIT_ROOT -> showCategoryList()
                         TransitionStates.TO_CATEGORIES -> main_activity_pager.currentItem = 0
                         TransitionStates.TO_PLAYER -> main_activity_pager.currentItem = 1
@@ -46,11 +47,16 @@ class MainActivity : AppCompatActivity(){
     override fun onBackPressed() {
         when {
             main_activity_pager.currentItem == 1 -> {
-                if (supportFragmentManager.findFragmentByTag(StationListFragment::javaClass.name) == null)
+                if (supportFragmentManager.findFragmentByTag(StationListFragment::javaClass.name) == null) {
+                    pagerViewAdapter.rootFragment.showBackButton(false)
                     supportFragmentManager.popBackStackImmediate()
+                }
                 super.onBackPressed()
             }
-            supportFragmentManager.findFragmentByTag("StationListFragment") != null -> supportFragmentManager.popBackStackImmediate()
+            supportFragmentManager.findFragmentByTag("StationListFragment") != null -> {
+                pagerViewAdapter.rootFragment.showBackButton(false)
+                supportFragmentManager.popBackStackImmediate()
+            }
             else ->  {
                 supportFragmentManager.popBackStackImmediate()
                 super.onBackPressed()

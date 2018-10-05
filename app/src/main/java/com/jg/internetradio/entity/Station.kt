@@ -2,16 +2,21 @@ package com.jg.internetradio.entity
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.jg.internetradio.entity.misc.categoryListToString
 
 data class Station(@SerializedName("id") @Expose val id: Int = 0,
-              @SerializedName("name") @Expose val name: String = "",
-              @SerializedName("country") @Expose val country: String = "",
-              @SerializedName("description") @Expose val description: String = "",
-              @SerializedName("total_listeners") @Expose val totalListeners: Int = 0,
-              @SerializedName("image") @Expose val image: Image? = null,
-              @SerializedName("slug") @Expose val slug: String = "",
-              @SerializedName("streams") @Expose val streams: List<Stream>? = null,
-              @SerializedName("categories") @Expose val categories: List<Category>? = null) {
+                   @SerializedName("name") @Expose val name: String = "",
+                   @SerializedName("country") @Expose val country: String = "",
+                   @SerializedName("description") @Expose val description: String = "",
+                   @SerializedName("total_listeners") @Expose val totalListeners: Int = 0,
+                   @SerializedName("image") @Expose val image: Image? = null,
+                   @SerializedName("slug") @Expose val slug: String = "",
+                   @SerializedName("streams") @Expose val streams: List<Stream>? = null,
+                   @SerializedName("categories") @Expose val categories: List<Category>? = null) {
 
-    fun categoryListToString() = categories?.joinToString(", ") { it.title }
+    val isStreamListNotEmptyOrNull
+        get() = streams != null && streams.isNotEmpty()
+
+    fun getFirstStreamFromList() = streams?.first()?.stream
+    fun categoriesToString() = categoryListToString(categories)
 }
