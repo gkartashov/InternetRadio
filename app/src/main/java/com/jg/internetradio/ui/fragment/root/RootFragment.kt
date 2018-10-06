@@ -15,20 +15,40 @@ import kotlinx.android.synthetic.main.fragment_root.*
 import kotlinx.android.synthetic.main.fragment_root.view.*
 
 class RootFragment : Fragment(), TransitionHandler {
-    override var subject: PublishSubject<Any> = PublishSubject.create()
-
     companion object {
         fun newInstance() = RootFragment()
     }
 
+    override var subject: PublishSubject<Any> = PublishSubject.create()
+
+    private val shouldShowBackButton: Boolean
+        get() = currentState == TransitionStates.TO_STATIONS
+
+    private var currentState = TransitionStates.INIT_ROOT
+    private val currentTransitionStateDescription = "CURRENT_TRANSITION_STATE"
+
+    private val backActionListener = View.OnClickListener {
+        currentState = TransitionStates.BACK
+        publishUpdatedState()
+        currentState = TransitionStates.INIT_ROOT
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        val savedState = savedInstanceState?.getInt(currentTransitionStateDescription)
+        currentState =  TransitionStates.fromInt(savedState)
+
         retainInstance = true
         val view = inflater.inflate(R.layout.fragment_root, container, false)
         view.player_button.setOnClickListener { showPlayer() }
-        view.back_button.setOnClickListener { subject.onNext(TransitionStates.BACK) }
-        if (savedInstanceState == null)
-            subject.onNext(TransitionStates.INIT_ROOT)
+        view.back_button.apply {
+            visibility = if (shouldShowBackButton) View.VISIBLE else View.GONE
+            setOnClickListener(backActionListener)
+        }
+
+        if (savedInstanceState == null) {
+            publishUpdatedState()
+        }
         return view
     }
 
@@ -37,21 +57,35 @@ class RootFragment : Fragment(), TransitionHandler {
         super.onDestroy()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt(currentTransitionStateDescription, currentState.stateNumber)
+        super.onSaveInstanceState(outState)
+    }
+
+    private fun publishUpdatedState() = subject.onNext(currentState)
+
     fun showStationList(category: Category) {
+        currentState = TransitionStates.TO_STATIONS
         showBackButton(true)
         subject.onNext(category)
     }
 
-    fun showPlayer() = subject.onNext(TransitionStates.TO_PLAYER)
+    fun showPlayer() {
+        currentState = TransitionStates.TO_PLAYER
+        publishUpdatedState()
+    }
 
-    fun showCategoryList() = subject.onNext(TransitionStates.TO_CATEGORIES)
+    fun showCategoryList(){
+        currentState = TransitionStates.TO_CATEGORIES
+        publishUpdatedState()
+    }
 
     fun changeToolbarTitle(title: String) {
         appbar_layout.setExpanded(true)
         toolbar_title.text = title
     }
 
-    fun showBackButton(show: Boolean) {
-        back_button.visibility = if (show) View.VISIBLE else View.GONE
+    fun showBackButton(isShow: Boolean) {
+        back_button.visibility = if (isShow) View.VISIBLE else View.GONE
     }
 }
