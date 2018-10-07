@@ -21,12 +21,13 @@ fun activationSetter(view: View, show: Boolean) {
 
 @BindingAdapter("imageUrl", "errorDrawable")
 fun loadImage(view: ImageView, url: String?, error: Drawable) {
-    if (url.isNullOrEmpty())
+    if (url.isNullOrEmpty()) {
         view.setImageDrawable(error)
-    else
+    } else {
         Glide
                 .with(view.context)
                 .setDefaultRequestOptions(getRequestOptions(circularProgressDrawable(view.context), error))
                 .load(url?.trim())
                 .into(view)
+    }
 }

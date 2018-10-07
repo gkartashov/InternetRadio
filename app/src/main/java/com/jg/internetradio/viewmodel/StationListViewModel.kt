@@ -18,21 +18,20 @@ class StationListViewModel(application: Application, val category: Category) : A
     }
 
     val isLoading = MutableLiveData<Boolean>()
-    val isLoaded = MutableLiveData<Boolean>()
+    val isLoaded: Boolean
+        get() = stationList.isValueNotNull
 
     var stationList: RetrofitLiveData<List<Station>>
 
-    private val afterLoadAction: (List<Station>) -> Unit = { isLoading.value = false }
-    private val onErrorAction = { isLoaded.value = false }
+    private val afterLoadAction = { isLoading.value = false }
 
     private val radioRepository: RadioRepository = (application as InternetRadioApplication).getRadioRepository()
 
     init {
         stationList = radioRepository.getCategoryStations(category)
         isLoading.value = true
-        isLoaded.value = true
         load()
     }
 
-    private fun load() = stationList.load(afterLoadAction, onErrorAction)
+    private fun load() = stationList.load(afterLoadAction)
 }

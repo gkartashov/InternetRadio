@@ -7,14 +7,17 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class RetrofitLiveData<T>(private val call: Observable<T>?) : MutableLiveData<T>() {
+    val isValueNotNull: Boolean
+        get() = value != null
+
     private var callResult: Disposable? = null
 
-    fun load(onNextAction: (T) -> Unit, onErrorAction: () -> Unit) {
+    fun load(onNextAction: () -> Unit, onErrorAction: () -> Unit = {}) {
         callResult = call?.subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe({
                     postValue(it)
-                    onNextAction.invoke(it)
+                    onNextAction.invoke()
                 }, {
                     postValue(null)
                     onErrorAction.invoke()

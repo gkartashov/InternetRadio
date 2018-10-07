@@ -30,8 +30,9 @@ class PlayerManager(private val context: Context) {
             playNewMediaSource(mediaSourceURI)
         } else {
             player = initializePlayer()
-            if (mediaSourceURI.isNotEmpty())
+            if (mediaSourceURI.isNotEmpty()) {
                 mediaSource = initializeMediaSource(mediaSourceURI)
+            }
             startPlayback()
         }
     }
