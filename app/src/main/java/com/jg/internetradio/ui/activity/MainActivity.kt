@@ -13,7 +13,7 @@ import com.jg.internetradio.ui.misc.TransitionStates
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
     private val pagerViewAdapter = PagerViewAdapter(supportFragmentManager)
     private lateinit var disposable: Disposable
 
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(){
                 pagerViewAdapter.rootFragment.showBackButton(false)
                 supportFragmentManager.popBackStackImmediate()
             }
-            else ->  {
+            else -> {
                 supportFragmentManager.popBackStackImmediate()
                 super.onBackPressed()
             }

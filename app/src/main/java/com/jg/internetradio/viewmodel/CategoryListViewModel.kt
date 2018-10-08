@@ -4,6 +4,7 @@ import android.app.Application
 import android.arch.lifecycle.*
 import com.jg.internetradio.InternetRadioApplication
 import com.jg.internetradio.entity.Category
+import com.jg.internetradio.entity.misc.capitalize
 import com.jg.internetradio.repository.RadioRepository
 import com.jg.internetradio.repository.RetrofitLiveData
 
@@ -15,7 +16,12 @@ class CategoryListViewModel(application: Application) : AndroidViewModel(applica
 
     private val radioRepository: RadioRepository = (application as InternetRadioApplication).getRadioRepository()
 
-    private val afterLoadAction = { isLoading.value = false }
+    private val afterLoadAction: (List<Category>) -> Unit = { resultList ->
+        isLoading.value = false
+        resultList.map {
+            it.description = capitalize(it.description)
+        }
+    }
 
     init {
         categoryList = radioRepository.getCategories()
@@ -23,5 +29,5 @@ class CategoryListViewModel(application: Application) : AndroidViewModel(applica
         load()
     }
 
-    private fun load() = categoryList.load(afterLoadAction, afterLoadAction)
+    private fun load() = categoryList.load(afterLoadAction, {})
 }

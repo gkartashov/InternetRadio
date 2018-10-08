@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.text.TextUtils"/>
         <variable
@@ -7,9 +8,128 @@
             type="com.jg.internetradio.viewmodel.PlayerViewModel" />
     </data>
 
-    <LinearLayout
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/player_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:background="@color/colorBackgroundStationImage"
+            android:contentDescription="@string/stationImageDescription"
+            app:errorDrawable="@{@drawable/default_image}"
+            app:imageUrl='@{safeUnbox(playerViewModel.isStationAdded) ? playerViewModel.getStationImageUrl() : ""}'
+            app:layout_constraintBottom_toTopOf="@+id/guideline_description"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:elevation="10dp"
+            tools:src="@drawable/default_image" />
+
+
+        <TextView
+            android:id="@+id/player_station_title"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="23dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@{safeUnbox(playerViewModel.isStationAdded) ? playerViewModel.getStationName() : @string/defaultStationTitle}"
+            android:textAlignment="center"
+            android:textSize="@dimen/text20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline_description"
+            tools:text="@string/defaultStationTitle" />
+
+        <TextView
+            android:id="@+id/player_category_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@{safeUnbox(playerViewModel.isStationAdded) ? playerViewModel.getCategoriesAsString() : @string/defaultCategoryTitle}"
+            android:textAlignment="center"
+            android:textSize="@dimen/text16sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_controls"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/player_station_title"
+            tools:text="@string/defaultCategoryTitle" />
+
+        <Button
+            android:id="@+id/player_station_list_button"
+            android:layout_width="@dimen/stopButtonSize"
+            android:layout_height="@dimen/stopButtonSize"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/ic_stationlist"
+            android:clickable="true"
+            android:contentDescription="@string/stationListButtonDescription"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/player_play_button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline_controls" />
+
+        <Button
+            android:id="@+id/player_play_button"
+            android:layout_width="@dimen/playButtonSize"
+            android:layout_height="@dimen/playButtonSize"
+            android:layout_marginBottom="8dp"
+            android:background="@{safeUnbox(playerViewModel.isPlaying) ? @drawable/ic_pause : @drawable/ic_play}"
+            android:clickable="@{safeUnbox(playerViewModel.isStationAdded)}"
+            android:contentDescription="@string/playButtonDescription"
+            android:focusable="@{safeUnbox(playerViewModel.isStationAdded)}"
+            android:onClick="@{() -> safeUnbox(playerViewModel.isPlaying) ? playerViewModel.stop() : playerViewModel.play()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/player_stop_button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/player_station_list_button"
+            app:layout_constraintTop_toTopOf="@+id/guideline_controls"
+            tools:background="@drawable/ic_play" />
+
+        <Button
+            android:id="@+id/player_stop_button"
+            android:layout_width="@dimen/stopButtonSize"
+            android:layout_height="@dimen/stopButtonSize"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/ic_stop"
+            android:clickable="@{safeUnbox(playerViewModel.isStationAdded)}"
+            android:contentDescription="@string/stopButtonDescription"
+            android:focusable="true"
+            android:onClick="@{() -> playerViewModel.removeSource()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/player_play_button"
+            app:layout_constraintTop_toTopOf="@+id/guideline_controls" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_controls"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="460dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="367dp" />
+    </android.support.constraint.ConstraintLayout>
+    <!--<LinearLayout
+
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,7 +144,9 @@
             android:background="@color/colorBackgroundStationImage"
             android:contentDescription="@string/stationImageDescription"
             app:imageUrl='@{safeUnbox(playerViewModel.isStationAdded) ? playerViewModel.getStationImageUrl() : ""}'
-            app:errorDrawable="@{@drawable/default_image}" />
+            app:errorDrawable="@{@drawable/default_image}"
+            tools:elevation="10dp"
+            tools:src="@drawable/default_image"/>
 
         <TextView
             android:id="@+id/player_station_title"
@@ -37,7 +159,8 @@
             android:text="@{safeUnbox(playerViewModel.isStationAdded) ? playerViewModel.getStationName() : @string/defaultStationTitle}"
             android:textSize="@dimen/text20sp"
             android:textAlignment="center"
-            style="@style/TextAppearance.AppCompat.Large"/>
+            style="@style/TextAppearance.AppCompat.Large"
+            tools:text="@string/defaultStationTitle" />
 
         <TextView
             android:id="@+id/player_category_title"
@@ -49,7 +172,8 @@
             android:layout_marginStart="@dimen/margin8dp"
             android:text="@{safeUnbox(playerViewModel.isStationAdded) ? playerViewModel.getCategoriesAsString() : @string/defaultCategoryTitle}"
             android:textAlignment="center"
-            android:textSize="@dimen/text16sp" />
+            android:textSize="@dimen/text16sp"
+            tools:text="@string/defaultCategoryTitle"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -77,7 +201,8 @@
                 android:clickable="@{safeUnbox(playerViewModel.isStationAdded)}"
                 android:focusable="@{safeUnbox(playerViewModel.isStationAdded)}"
                 android:background="@{safeUnbox(playerViewModel.isPlaying) ? @drawable/ic_pause : @drawable/ic_play}"
-                android:onClick="@{() -> safeUnbox(playerViewModel.isPlaying) ? playerViewModel.stop() : playerViewModel.play()}"/>
+                android:onClick="@{() -> safeUnbox(playerViewModel.isPlaying) ? playerViewModel.stop() : playerViewModel.play()}"
+                tools:background="@drawable/ic_play"/>
 
             <Button
                 android:id="@+id/player_stop_button"
@@ -89,5 +214,5 @@
                 android:background="@drawable/ic_stop"
                 android:onClick="@{() -> playerViewModel.removeSource()}"/>
         </LinearLayout>
-    </LinearLayout>
+    </LinearLayout>-->
 </layout>

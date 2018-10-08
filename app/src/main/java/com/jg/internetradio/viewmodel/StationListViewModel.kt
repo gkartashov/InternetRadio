@@ -23,7 +23,7 @@ class StationListViewModel(application: Application, val category: Category) : A
 
     var stationList: RetrofitLiveData<List<Station>>
 
-    private val afterLoadAction = { isLoading.value = false }
+    private val afterLoadAction: (List<Station>) -> Unit = { isLoading.value = false }
 
     private val radioRepository: RadioRepository = (application as InternetRadioApplication).getRadioRepository()
 
