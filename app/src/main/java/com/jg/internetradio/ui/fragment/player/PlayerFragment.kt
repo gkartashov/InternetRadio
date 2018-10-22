@@ -17,27 +17,20 @@ import com.jg.internetradio.entity.Station
 import com.jg.internetradio.viewmodel.PlayerViewModel
 
 class PlayerFragment : Fragment() {
-    companion object {
-        lateinit var toCategoryListAction: () -> Unit
-
-        fun newInstance(toCategoryListAction: () -> Unit): PlayerFragment {
-            this.toCategoryListAction = toCategoryListAction
-            return PlayerFragment()
-        }
-    }
-
     private lateinit var binding: FragmentPlayerBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_player, container,false)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_player, container, false)
         binding.playerViewModel = ViewModelProviders.of(this).get(PlayerViewModel::class.java)
 
         lifecycle.addObserver(binding.playerViewModel as PlayerViewModel)
         binding.setLifecycleOwner(this)
 
         binding.playerStationListButton.setOnClickListener { toCategoryListAction.invoke() }
-        binding.playerViewModel?.observeToStation(this, Observer {} )
+        binding.playerViewModel?.observeToStation(this, Observer {})
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             binding.playerImage.elevation = 10f
@@ -51,4 +44,12 @@ class PlayerFragment : Fragment() {
         playerViewModel?.play()
     }
 
+    companion object {
+        lateinit var toCategoryListAction: () -> Unit
+
+        fun newInstance(toCategoryListAction: () -> Unit): PlayerFragment {
+            this.toCategoryListAction = toCategoryListAction
+            return PlayerFragment()
+        }
+    }
 }

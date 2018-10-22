@@ -14,14 +14,14 @@ class RetrofitLiveData<T>(private val call: Observable<T>?) : MutableLiveData<T>
 
     fun load(onNextAction: (T) -> Unit, onErrorAction: () -> Unit = {}) {
         callResult = call?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe({
-                    postValue(it)
-                    onNextAction.invoke(it)
-                }, {
-                    postValue(null)
-                    onErrorAction.invoke()
-                })
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe({
+                postValue(it)
+                onNextAction.invoke(it)
+            }, {
+                postValue(null)
+                onErrorAction.invoke()
+            })
     }
 
     fun clear() {

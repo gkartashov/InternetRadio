@@ -1,76 +1,93 @@
 package com.jg.internetradio.viewmodel.manager
 
+import android.content.ComponentName
 import android.content.Context
-import android.net.Uri
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.ExtractorMediaSource
-import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.util.Util
+import android.content.Context.BIND_AUTO_CREATE
+import android.content.Intent
+import android.content.ServiceConnection
+import android.os.IBinder
+import com.jg.internetradio.entity.Station
+import com.jg.internetradio.viewmodel.player.PlayerAction.*
+import com.jg.internetradio.viewmodel.service.PlayerService
 
 class PlayerManager(private val context: Context) {
-    val isPlaying: Boolean
-        get() = player != null && player?.playWhenReady == true
+    private var isRegistered = false
 
-    private val bandwidthMeter = DefaultBandwidthMeter()
-    private val trackSelectionFactory = AdaptiveTrackSelection.Factory(bandwidthMeter)
-    private val trackSelector = DefaultTrackSelector(trackSelectionFactory)
+    private var playerService: PlayerService? = null
 
-    private var player: SimpleExoPlayer? = null
+    private val stopAction: () -> Unit = {
+        stop()
+        removeSourceAction()
+    }
 
-    private val dataSourceFactory = DefaultDataSourceFactory(context, Util.getUserAgent(context, "InternetRadio"))
-    private var mediaSource: MediaSource? = null
+    private lateinit var removeSourceAction: () -> Unit
 
-    fun play(mediaSourceURI: String = "") {
-        if (isPlaying) {
-            playNewMediaSource(mediaSourceURI)
-        } else {
-            player = initializePlayer()
-            if (mediaSourceURI.isNotEmpty()) {
-                mediaSource = initializeMediaSource(mediaSourceURI)
-            }
-            startPlayback()
+    private lateinit var stationPlayerActionLambda: (Boolean) -> Unit
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+
+        }
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as? PlayerService.PlayerServiceBinder
+            playerService = binder?.getService()
+            playerService?.setOnStateChangedAction(stationPlayerActionLambda)
+            playerService?.setOnStopAction(stopAction)
         }
     }
 
-    private fun playNewMediaSource(mediaSourceURI: String) {
-        clearMediaSource()
-        mediaSource = initializeMediaSource(mediaSourceURI)
-        startPlayback()
+    fun setRemoveSourceAction(lambda: () -> Unit) {
+        removeSourceAction = lambda
     }
 
-    private fun clearMediaSource() {
-        mediaSource = null
+    fun play(station: Station, stationPlayerActionLambda: (Boolean) -> Unit) {
+        this.stationPlayerActionLambda = stationPlayerActionLambda
+
+        if (playerService == null) {
+            bindService()
+        }
+
+        val intent = buildServiceIntent {
+            putExtra("MEDIA_SOURCE_URI", station.getFirstStreamFromList() ?: "")
+            putExtra("STATION_NAME", station.name)
+            putExtra("CATEGORIES", station.categoriesToString())
+            action = PLAY.name
+        }
+
+        context.startService(intent)
+        isRegistered = true
     }
 
-    private fun initializeMediaSource(mediaSourceURI: String): MediaSource {
-        val preparedMediaSource = Uri.parse(mediaSourceURI)
-        return ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(preparedMediaSource)
+    private fun bindService() {
+        context.bindService(
+            buildServiceIntent { action = CREATE.name },
+            serviceConnection,
+            BIND_AUTO_CREATE
+        )
     }
 
-    private fun startPlayback() {
-        player?.prepare(mediaSource)
-        player?.playWhenReady = true
+    fun pause() {
+        val intent = buildServiceIntent {
+            action = PAUSE.name
+        }
+        context.startService(intent)
     }
 
-    private fun initializePlayer() = ExoPlayerFactory.newSimpleInstance(context, trackSelector)
+    fun unbindService() {
+        if (isRegistered) {
+            context.unbindService(serviceConnection)
+        }
+    }
 
     fun stop() {
-        player?.playWhenReady = false
-        player?.stop()
-
-        releasePlayerResources()
-        clearMediaSource()
+        val intent = buildServiceIntent { }
+        unbindService()
+        context.stopService(intent)
+        isRegistered = false
+        playerService = null
     }
 
-    private fun releasePlayerResources() {
-        player?.release()
-        player = null
-    }
-
-
+    private fun buildServiceIntent(action: Intent.() -> Unit): Intent =
+        Intent(context, PlayerService::class.java).apply(action)
 }

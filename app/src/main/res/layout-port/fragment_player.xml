@@ -90,7 +90,7 @@
             android:clickable="@{safeUnbox(playerViewModel.isStationAdded)}"
             android:contentDescription="@string/playButtonDescription"
             android:focusable="@{safeUnbox(playerViewModel.isStationAdded)}"
-            android:onClick="@{() -> safeUnbox(playerViewModel.isPlaying) ? playerViewModel.stop() : playerViewModel.play()}"
+            android:onClick="@{() -> safeUnbox(playerViewModel.isPlaying) ? playerViewModel.pause() : playerViewModel.play()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/player_stop_button"
             app:layout_constraintHorizontal_bias="0.5"

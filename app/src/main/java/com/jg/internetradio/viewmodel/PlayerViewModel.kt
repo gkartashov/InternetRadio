@@ -14,22 +14,35 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
     private val playerManager = PlayerManager(application.applicationContext)
     private val observableStation = PlayerLiveData()
 
+    private val additionalStationPlayerAction: (Boolean) -> Unit = {
+        isPlaying.value = it
+    }
+
+    private val removeSourceLambda: () -> Unit = {
+        removeSource()
+    }
+
     init {
         isPlaying.value = false
         isStationAdded.value = false
+        playerManager.setRemoveSourceAction(removeSourceLambda)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun play() {
         if (observableStation.isReadyToPlay) {
-            playerManager.play(observableStation.getFirstStream()!!)
-            isPlaying.value = playerManager.isPlaying
+            observableStation.value?.let {
+                playerManager.play(it, additionalStationPlayerAction)
+            }
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun stop() {
-        playerManager.stop()
+    override fun onCleared() {
+        playerManager.unbindService()
+        super.onCleared()
+    }
+
+    fun pause() {
+        playerManager.pause()
         isPlaying.value = false
     }
 
@@ -44,9 +57,13 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
         isStationAdded.value = false
     }
 
-    fun observeToStation(lifecycleOwner: LifecycleOwner, observer: Observer<Station>) {
-        observableStation.observe(lifecycleOwner, observer)
+    private fun stop() {
+        playerManager.stop()
+        isPlaying.value = false
     }
+
+    fun observeToStation(lifecycleOwner: LifecycleOwner, observer: Observer<Station>) =
+        observableStation.observe(lifecycleOwner, observer)
 
     fun getCategoriesAsString() = observableStation.getCategoriesAsString()
 

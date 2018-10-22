@@ -29,5 +29,5 @@ class CategoryListViewModel(application: Application) : AndroidViewModel(applica
         load()
     }
 
-    private fun load() = categoryList.load(afterLoadAction, {})
+    private fun load() = categoryList.load(afterLoadAction, { isLoading.value = false})
 }

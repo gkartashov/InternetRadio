@@ -8,13 +8,12 @@ import com.jg.internetradio.entity.Station
 import com.jg.internetradio.repository.RadioRepository
 import com.jg.internetradio.repository.RetrofitLiveData
 
-
-class StationListViewModel(application: Application, val category: Category) : AndroidViewModel(application) {
-
-    class Factory(private val application: Application, private val category: Category) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return StationListViewModel(application, category) as T
-        }
+class StationListViewModel(application: Application, val category: Category) :
+    AndroidViewModel(application) {
+    class Factory(private val application: Application, private val category: Category) :
+        ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>) =
+            StationListViewModel(application, category) as T
     }
 
     val isLoading = MutableLiveData<Boolean>()
@@ -25,7 +24,8 @@ class StationListViewModel(application: Application, val category: Category) : A
 
     private val afterLoadAction: (List<Station>) -> Unit = { isLoading.value = false }
 
-    private val radioRepository: RadioRepository = (application as InternetRadioApplication).getRadioRepository()
+    private val radioRepository: RadioRepository =
+        (application as InternetRadioApplication).getRadioRepository()
 
     init {
         stationList = radioRepository.getCategoryStations(category)
@@ -33,5 +33,5 @@ class StationListViewModel(application: Application, val category: Category) : A
         load()
     }
 
-    private fun load() = stationList.load(afterLoadAction)
+    private fun load() = stationList.load(afterLoadAction, { isLoading.value = false })
 }

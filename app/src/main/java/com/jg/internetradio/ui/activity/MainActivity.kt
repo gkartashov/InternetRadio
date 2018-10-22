@@ -1,5 +1,6 @@
 package com.jg.internetradio.ui.activity
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.view.ViewPager
@@ -66,34 +67,60 @@ class MainActivity : AppCompatActivity() {
 
     private fun showStationList(category: Category) {
         supportFragmentManager.beginTransaction()
-                .setCustomAnimations(android.R.animator.fade_in,
-                        android.R.animator.fade_out,
-                        android.R.animator.fade_in,
-                        android.R.animator.fade_out)
-                .replace(R.id.container, StationListFragment.newInstance(category,
-                        pagerViewAdapter.rootFragment::showPlayer,
-                        pagerViewAdapter.playerFragment::play,
-                        pagerViewAdapter.rootFragment::changeToolbarTitle), "StationListFragment")
-                .addToBackStack("StationListFragment")
-                .commitAllowingStateLoss()
+            .setCustomAnimations(
+                android.R.animator.fade_in,
+                android.R.animator.fade_out,
+                android.R.animator.fade_in,
+                android.R.animator.fade_out
+            )
+            .replace(
+                R.id.container, StationListFragment.newInstance(
+                    category,
+                    pagerViewAdapter.rootFragment::showPlayer,
+                    pagerViewAdapter.playerFragment::play,
+                    pagerViewAdapter.rootFragment::changeToolbarTitle
+                ), "StationListFragment"
+            )
+            .addToBackStack("StationListFragment")
+            .commitAllowingStateLoss()
     }
 
     private fun showCategoryList() {
         supportFragmentManager.beginTransaction()
-                .setCustomAnimations(android.R.animator.fade_in,
-                        android.R.animator.fade_out,
-                        android.R.animator.fade_in,
-                        android.R.animator.fade_out)
-                .replace(R.id.container, CategoryListFragment.newInstance(pagerViewAdapter.rootFragment::changeToolbarTitle, pagerViewAdapter.rootFragment::showStationList), "CategoryListFragment")
-                .commitAllowingStateLoss()
+            .setCustomAnimations(
+                android.R.animator.fade_in,
+                android.R.animator.fade_out,
+                android.R.animator.fade_in,
+                android.R.animator.fade_out
+            )
+            .replace(
+                R.id.container,
+                CategoryListFragment.newInstance(
+                    pagerViewAdapter.rootFragment::changeToolbarTitle,
+                    pagerViewAdapter.rootFragment::showStationList
+                ),
+                "CategoryListFragment"
+            )
+            .commitAllowingStateLoss()
     }
 
     private fun customTransformer() = ViewPager.PageTransformer { page, position ->
-        page.translationX = page.width * if (position <= -1.0f || position >= 1.0f || position == 0.0f) position else -position
+        page.translationX = page.width *
+                if (position <= -1.0f || position >= 1.0f || position == 0.0f) position else -position
         page.alpha = when {
             position <= -1.0f || position >= 1.0f -> 0.0f
             position == 0.0f -> 1.0f
             else -> 1.0f - Math.abs(position)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        val action = intent?.action
+        action?.let {
+            when (action) {
+                "SHOW_STATIONS_SOURCE_LIST" -> main_activity_pager.currentItem = 0
+                else -> main_activity_pager.currentItem = 1
+            }
         }
     }
 }

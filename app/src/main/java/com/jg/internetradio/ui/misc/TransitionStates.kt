@@ -10,6 +10,6 @@ enum class TransitionStates(val stateNumber: Int) {
     companion object {
         private val map = TransitionStates.values().associateBy(TransitionStates::stateNumber)
 
-        fun fromInt(type: Int?): TransitionStates =  map[type] ?: INIT_ROOT
+        fun fromInt(type: Int?): TransitionStates = map[type] ?: INIT_ROOT
     }
 }
